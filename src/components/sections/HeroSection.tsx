@@ -50,16 +50,18 @@ export function HeroSection() {
         <div className="grid gap-4 rounded-[2rem] border border-neutral-200 bg-neutral-100 p-4 shadow-sm sm:grid-cols-2">
           <div className="rounded-[1.5rem] bg-white p-3 shadow-sm">
             <p className="mb-3 text-xs font-black uppercase text-neutral-500">Before</p>
-            <div
-              className="shoe-photo min-h-72 rounded-[1.25rem] bg-cover bg-center"
-              style={{ backgroundImage: `url(${heroBefore})` }}
+            <img
+              src={heroBefore}
+              alt="Sepatu sebelum treatment DR. SHOE"
+              className="h-72 w-full rounded-[1.25rem] object-cover"
             />
           </div>
           <div className="rounded-[1.5rem] border-2 border-black bg-[var(--brand)] p-3 shadow-sm">
             <p className="mb-3 text-xs font-black uppercase text-black">After</p>
-            <div
-              className="shoe-photo min-h-72 rounded-[1.25rem] bg-cover bg-center"
-              style={{ backgroundImage: `url(${heroAfter})` }}
+            <img
+              src={heroAfter}
+              alt="Sepatu setelah treatment DR. SHOE"
+              className="h-72 w-full rounded-[1.25rem] object-cover"
             />
           </div>
         </div>
