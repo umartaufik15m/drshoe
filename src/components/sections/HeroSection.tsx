@@ -5,8 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { BRAND_TAGLINE, CAMPAIGN_PHRASE } from "@/lib/constants";
 
 export function HeroSection() {
-  const heroBefore = "/images/hero-before.jpg";
-  const heroAfter = "/images/hero-after.jpg";
+  const heroBefore = "/images/hero-before.png";
+  const heroAfter = "/images/hero-after.png";
 
   return (
     <section className="overflow-hidden bg-white py-16 md:py-24">
