@@ -58,6 +58,7 @@ export function BookingForm({
 }) {
   const [image, setImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [whatsAppUrl, setWhatsAppUrl] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -82,6 +83,8 @@ export function BookingForm({
   const dropPointOptions = useMemo(() => dropPoints, [dropPoints]);
 
   async function onSubmit(values: BookingValues) {
+    if (isSubmitted) return;
+
     setIsSubmitting(true);
     setNotice(null);
 
@@ -129,6 +132,7 @@ export function BookingForm({
         notes: values.notes
       });
       setWhatsAppUrl(createWhatsAppUrl(WHATSAPP_NUMBER, message));
+      setIsSubmitted(true);
       setNotice(
         isSupabaseConfigured
           ? "Booking tersimpan. Lanjutkan ke WhatsApp untuk konfirmasi admin."
@@ -217,8 +221,9 @@ export function BookingForm({
         ) : null}
 
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Button type="submit" variant="brand" disabled={isSubmitting}>
-            {isSubmitting ? "Menyimpan..." : "Submit Booking"} <ArrowRight size={16} />
+          <Button type="submit" variant="brand" disabled={isSubmitting || isSubmitted}>
+            {isSubmitting ? "Menyimpan..." : isSubmitted ? "Booking Terkirim" : "Submit Booking"}{" "}
+            <ArrowRight size={16} />
           </Button>
           {whatsAppUrl ? (
             <Button asChild variant="outline">
