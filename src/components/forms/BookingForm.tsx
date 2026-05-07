@@ -175,29 +175,37 @@ export function BookingForm({
         }
       }
 
-      if (supabase) {
-        const { error } = await supabase.from("orders").insert({
-          customer_name: values.customer_name,
-          phone: values.phone,
-          address: values.address || null,
-          shoe_items: bookingItems,
-          shoe_type: bookingItems.map((item) => item.shoeType).join(", "),
-          shoe_material: bookingItems.map(itemSummary).join(" | "),
-          service_id: service?.id || null,
-          service_name: service?.name || values.service_slug,
-          service_price: service?.price || null,
-          quantity: bookingItems.length,
-          surcharge_total: pricing.surchargeTotal,
-          is_express: pricing.expressSurchargeTotal > 0,
-          express_surcharge_total: pricing.expressSurchargeTotal,
-          estimated_total: pricing.total,
-          delivery_method: values.delivery_method,
-          drop_point_id: dropPoint?.id || null,
-          drop_point_name: dropPoint?.name || null,
-          image_url: imageUrl,
-          notes: values.notes || null
+      const bookingPayload = {
+        customer_name: values.customer_name,
+        phone: values.phone,
+        address: values.address || null,
+        shoe_items: bookingItems,
+        shoe_type: bookingItems.map((item) => item.shoeType).join(", "),
+        shoe_material: bookingItems.map(itemSummary).join(" | "),
+        service_id: service?.id || null,
+        service_name: service?.name || values.service_slug,
+        service_price: service?.price || null,
+        quantity: bookingItems.length,
+        surcharge_total: pricing.surchargeTotal,
+        is_express: pricing.expressSurchargeTotal > 0,
+        express_surcharge_total: pricing.expressSurchargeTotal,
+        estimated_total: pricing.total,
+        delivery_method: values.delivery_method,
+        drop_point_id: dropPoint?.id || null,
+        drop_point_name: dropPoint?.name || null,
+        image_url: imageUrl,
+        notes: values.notes || null
+      };
+
+      if (isSupabaseConfigured) {
+        const response = await fetch("/api/bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(bookingPayload)
         });
-        if (error) throw error;
+        const result = (await response.json()) as { error?: string; warning?: string };
+        if (!response.ok) throw new Error(result.error || "Gagal menyimpan booking.");
+        if (result.warning) setNotice(result.warning);
       }
 
       const message = createBookingMessage({
@@ -225,10 +233,11 @@ export function BookingForm({
       });
       setWhatsAppUrl(createWhatsAppUrl(WHATSAPP_NUMBER, message));
       setIsSubmitted(true);
-      setNotice(
-        isSupabaseConfigured
+      setNotice((current) =>
+        current ||
+        (isSupabaseConfigured
           ? "Booking tersimpan sebagai satu nota. Lanjutkan ke WhatsApp untuk konfirmasi admin."
-          : "Mode demo aktif karena Supabase belum dikonfigurasi. Lanjutkan ke WhatsApp untuk konfirmasi admin."
+          : "Mode demo aktif karena Supabase belum dikonfigurasi. Lanjutkan ke WhatsApp untuk konfirmasi admin.")
       );
     } catch (error) {
       submitLockRef.current = false;

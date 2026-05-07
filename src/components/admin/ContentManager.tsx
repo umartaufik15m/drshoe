@@ -7,22 +7,24 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
-import { fallbackDropPoints, fallbackServices, fallbackTestimonials } from "@/lib/data";
+import { fallbackBeforeAfter, fallbackDropPoints, fallbackServices, fallbackTestimonials } from "@/lib/data";
 import { formatRupiah } from "@/lib/utils";
 
-type ManagerKind = "services" | "drop_points" | "testimonials";
+type ManagerKind = "services" | "drop_points" | "testimonials" | "before_after";
 type ContentRow = Record<string, string | number | boolean | null | undefined> & { id?: string };
 
 const fallbackByKind: Record<ManagerKind, ContentRow[]> = {
   services: fallbackServices,
   drop_points: fallbackDropPoints,
-  testimonials: fallbackTestimonials
+  testimonials: fallbackTestimonials,
+  before_after: fallbackBeforeAfter
 };
 
 const titleByKind: Record<ManagerKind, string> = {
   services: "Services",
   drop_points: "Drop Points",
-  testimonials: "Testimonials"
+  testimonials: "Testimonials",
+  before_after: "Before After"
 };
 
 export function ContentManager({ kind }: { kind: ManagerKind }) {
@@ -83,7 +85,16 @@ export function ContentManager({ kind }: { kind: ManagerKind }) {
               description: form.description,
               is_active: true
             }
-          : {
+          : kind === "before_after"
+            ? {
+                title: form.title,
+                service_name: form.service_name,
+                before_image_url: form.before_image_url,
+                after_image_url: form.after_image_url,
+                description: form.description,
+                is_active: true
+              }
+            : {
               customer_name: form.customer_name,
               rating: Number(form.rating || 5),
               service_name: form.service_name,
@@ -126,6 +137,24 @@ export function ContentManager({ kind }: { kind: ManagerKind }) {
               </Field>
               <Field label="Komentar">
                 <Textarea value={(form.comment as string) || ""} onChange={(e) => setForm({ ...form, comment: e.target.value })} required />
+              </Field>
+            </>
+          ) : kind === "before_after" ? (
+            <>
+              <Field label="Judul">
+                <Input value={(form.title as string) || ""} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+              </Field>
+              <Field label="Layanan">
+                <Input value={(form.service_name as string) || ""} onChange={(e) => setForm({ ...form, service_name: e.target.value })} required />
+              </Field>
+              <Field label="URL foto before">
+                <Input value={(form.before_image_url as string) || ""} onChange={(e) => setForm({ ...form, before_image_url: e.target.value })} placeholder="https://..." required />
+              </Field>
+              <Field label="URL foto after">
+                <Input value={(form.after_image_url as string) || ""} onChange={(e) => setForm({ ...form, after_image_url: e.target.value })} placeholder="https://..." required />
+              </Field>
+              <Field label="Deskripsi">
+                <Textarea value={(form.description as string) || ""} onChange={(e) => setForm({ ...form, description: e.target.value })} required />
               </Field>
             </>
           ) : (
@@ -182,7 +211,7 @@ export function ContentManager({ kind }: { kind: ManagerKind }) {
             <tbody>
               {items.map((item, index) => (
                 <tr key={item.id || index} className="border-t border-neutral-200">
-                  <td className="p-4 font-black">{item.name || item.customer_name}</td>
+                  <td className="p-4 font-black">{item.name || item.customer_name || item.title}</td>
                   <td className="p-4 text-neutral-600">
                     {kind === "services" ? formatRupiah(Number(item.price || 0)) : item.description || item.comment}
                   </td>
