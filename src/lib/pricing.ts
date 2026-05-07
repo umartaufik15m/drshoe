@@ -5,6 +5,7 @@ export const EXPRESS_EXCLUDED_SERVICE_SLUGS = ["unyellowing", "repaint"];
 const surchargeKeywords = ["putih", "white", "suede", "kulit", "leather", "outdoor"];
 
 export type ShoeBookingItem = {
+  brand?: string | null;
   shoeType?: string | null;
   materials?: string[] | null;
   otherMaterial?: string | null;
@@ -13,6 +14,7 @@ export type ShoeBookingItem = {
 
 function itemText(item: ShoeBookingItem) {
   return [
+    item.brand,
     item.shoeType,
     item.color,
     ...(item.materials || []),

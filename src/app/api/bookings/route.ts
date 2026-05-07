@@ -20,6 +20,7 @@ type BookingPayload = {
   drop_point_id?: string | null;
   drop_point_name?: string | null;
   image_url?: string | null;
+  order_images?: string[] | null;
   notes?: string | null;
 };
 

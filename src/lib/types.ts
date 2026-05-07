@@ -75,6 +75,7 @@ export type Order = {
   drop_point_id?: string | null;
   drop_point_name?: string | null;
   image_url?: string | null;
+  order_images?: string[] | null;
   notes?: string | null;
   status: OrderStatus;
   created_at?: string | null;

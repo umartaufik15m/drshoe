@@ -131,6 +131,15 @@ export function OrdersManager({ title = "Orders", limit }: { title?: string; lim
                   {order.shoe_material ? (
                     <p className="mt-1 max-w-72 text-xs font-semibold text-neutral-500">{order.shoe_material}</p>
                   ) : null}
+                  {(order.order_images?.length || order.image_url) ? (
+                    <div className="mt-3 grid max-w-72 grid-cols-3 gap-2">
+                      {(order.order_images?.length ? order.order_images : [order.image_url]).filter(Boolean).map((url, index) => (
+                        <a key={`${url}-${index}`} href={url || "#"} target="_blank" rel="noreferrer">
+                          <img src={url || ""} alt={`Foto order ${index + 1}`} className="h-16 w-full rounded-xl object-cover" />
+                        </a>
+                      ))}
+                    </div>
+                  ) : null}
                 </td>
                 <td className="p-4">{deliveryMethodLabels[order.delivery_method]}</td>
                 <td className="p-4">{order.drop_point_name || "-"}</td>

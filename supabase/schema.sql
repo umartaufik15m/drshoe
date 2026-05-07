@@ -47,6 +47,7 @@ create table if not exists public.orders (
   drop_point_id uuid references public.drop_points(id) on delete set null,
   drop_point_name text,
   image_url text,
+  order_images jsonb default '[]'::jsonb,
   notes text,
   status text check (status in ('new', 'confirmed', 'picked_up', 'in_treatment', 'quality_check', 'ready', 'completed', 'cancelled')) default 'new',
   created_at timestamptz default now(),
@@ -70,6 +71,9 @@ add column if not exists express_surcharge_total int default 0;
 
 alter table public.orders
 add column if not exists estimated_total int;
+
+alter table public.orders
+add column if not exists order_images jsonb default '[]'::jsonb;
 
 create table if not exists public.franchise_inquiries (
   id uuid primary key default gen_random_uuid(),

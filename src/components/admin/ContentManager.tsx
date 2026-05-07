@@ -31,6 +31,8 @@ export function ContentManager({ kind }: { kind: ManagerKind }) {
   const [items, setItems] = useState<ContentRow[]>(fallbackByKind[kind]);
   const [notice, setNotice] = useState<string | null>(null);
   const [form, setForm] = useState<ContentRow>({});
+  const [beforeFile, setBeforeFile] = useState<File | null>(null);
+  const [afterFile, setAfterFile] = useState<File | null>(null);
 
   async function load() {
     const supabase = createBrowserSupabaseClient();
@@ -66,6 +68,32 @@ export function ContentManager({ kind }: { kind: ManagerKind }) {
       setNotice("Supabase belum dikonfigurasi.");
       return;
     }
+    let beforeImageUrl = form.before_image_url as string | undefined;
+    let afterImageUrl = form.after_image_url as string | undefined;
+
+    if (kind === "before_after") {
+      if (beforeFile) {
+        const extension = beforeFile.name.split(".").pop() || "jpg";
+        const path = `before-after/${Date.now()}-before.${extension}`;
+        const upload = await supabase.storage.from("before-after").upload(path, beforeFile);
+        if (upload.error) {
+          setNotice(upload.error.message);
+          return;
+        }
+        beforeImageUrl = supabase.storage.from("before-after").getPublicUrl(path).data.publicUrl;
+      }
+      if (afterFile) {
+        const extension = afterFile.name.split(".").pop() || "jpg";
+        const path = `before-after/${Date.now()}-after.${extension}`;
+        const upload = await supabase.storage.from("before-after").upload(path, afterFile);
+        if (upload.error) {
+          setNotice(upload.error.message);
+          return;
+        }
+        afterImageUrl = supabase.storage.from("before-after").getPublicUrl(path).data.publicUrl;
+      }
+    }
+
     const payload =
       kind === "services"
         ? {
@@ -89,8 +117,8 @@ export function ContentManager({ kind }: { kind: ManagerKind }) {
             ? {
                 title: form.title,
                 service_name: form.service_name,
-                before_image_url: form.before_image_url,
-                after_image_url: form.after_image_url,
+                before_image_url: beforeImageUrl,
+                after_image_url: afterImageUrl,
                 description: form.description,
                 is_active: true
               }
@@ -108,6 +136,8 @@ export function ContentManager({ kind }: { kind: ManagerKind }) {
       return;
     }
     setForm({});
+    setBeforeFile(null);
+    setAfterFile(null);
     await load();
   }
 
@@ -148,10 +178,16 @@ export function ContentManager({ kind }: { kind: ManagerKind }) {
                 <Input value={(form.service_name as string) || ""} onChange={(e) => setForm({ ...form, service_name: e.target.value })} required />
               </Field>
               <Field label="URL foto before">
-                <Input value={(form.before_image_url as string) || ""} onChange={(e) => setForm({ ...form, before_image_url: e.target.value })} placeholder="https://..." required />
+                <Input value={(form.before_image_url as string) || ""} onChange={(e) => setForm({ ...form, before_image_url: e.target.value })} placeholder="https://..." />
+              </Field>
+              <Field label="Upload foto before">
+                <Input type="file" accept="image/*" onChange={(e) => setBeforeFile(e.target.files?.[0] || null)} />
               </Field>
               <Field label="URL foto after">
-                <Input value={(form.after_image_url as string) || ""} onChange={(e) => setForm({ ...form, after_image_url: e.target.value })} placeholder="https://..." required />
+                <Input value={(form.after_image_url as string) || ""} onChange={(e) => setForm({ ...form, after_image_url: e.target.value })} placeholder="https://..." />
+              </Field>
+              <Field label="Upload foto after">
+                <Input type="file" accept="image/*" onChange={(e) => setAfterFile(e.target.files?.[0] || null)} />
               </Field>
               <Field label="Deskripsi">
                 <Textarea value={(form.description as string) || ""} onChange={(e) => setForm({ ...form, description: e.target.value })} required />

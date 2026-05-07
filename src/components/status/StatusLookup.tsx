@@ -27,6 +27,8 @@ type StatusOrder = {
   estimated_total?: number | null;
   is_express?: boolean | null;
   express_surcharge_total?: number | null;
+  image_url?: string | null;
+  order_images?: string[] | null;
   created_at: string | null;
   updated_at: string | null;
 };
@@ -115,6 +117,7 @@ export function StatusLookup() {
                     {order.shoe_items.map((item, index) => (
                       <div key={index} className="rounded-2xl border border-neutral-200 bg-white p-3">
                         <p className="font-black text-neutral-900">Sepatu {index + 1}</p>
+                        <p>Merek: {item.brand || "-"}</p>
                         <p>Jenis: {item.shoeType || "-"}</p>
                         <p>Bahan: {materialLabel(item)}</p>
                         <p>Warna: {item.color || "-"}</p>
@@ -129,6 +132,18 @@ export function StatusLookup() {
                 </p>
               </div>
             </div>
+            {(order.order_images?.length || order.image_url) ? (
+              <div className="mt-5">
+                <p className="mb-3 text-sm font-black text-neutral-900">Foto dari customer</p>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {(order.order_images?.length ? order.order_images : [order.image_url]).filter(Boolean).map((url, index) => (
+                    <a key={`${url}-${index}`} href={url || "#"} target="_blank" rel="noreferrer">
+                      <img src={url || ""} alt={`Foto sepatu ${index + 1}`} className="h-32 w-full rounded-2xl object-cover" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             <div className="mt-4 grid gap-2 text-sm text-neutral-600 sm:grid-cols-2">
               <p>Dibuat: {prettyDate(order.created_at)}</p>
               <p>Update: {prettyDate(order.updated_at || order.created_at)}</p>

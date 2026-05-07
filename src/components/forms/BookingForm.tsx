@@ -33,6 +33,7 @@ const materialOptions = [
 ];
 
 const shoeItemSchema = z.object({
+  brand: z.string().min(1, "Merek sepatu wajib diisi."),
   shoeType: z.string().min(1, "Jenis sepatu wajib diisi."),
   materials: z.array(z.string()).optional(),
   otherMaterial: z.string().optional(),
@@ -68,6 +69,7 @@ type BookingValues = z.output<typeof schema>;
 
 function normalizeItems(items: BookingValues["shoe_items"]): ShoeBookingItem[] {
   return items.map((item) => ({
+    brand: item.brand,
     shoeType: item.shoeType,
     materials: item.materials || [],
     otherMaterial: item.materials?.includes("lainnya") ? item.otherMaterial || null : null,
@@ -77,7 +79,7 @@ function normalizeItems(items: BookingValues["shoe_items"]): ShoeBookingItem[] {
 
 function itemSummary(item: ShoeBookingItem) {
   const materials = [...(item.materials || []), item.otherMaterial].filter(Boolean).join(", ") || "-";
-  return `${item.shoeType || "-"} / ${materials} / ${item.color || "-"}`;
+  return `${item.brand || "-"} / ${item.shoeType || "-"} / ${materials} / ${item.color || "-"}`;
 }
 
 export function BookingForm({
@@ -91,7 +93,7 @@ export function BookingForm({
   defaultService?: string;
   defaultDelivery?: string;
 }) {
-  const [image, setImage] = useState<File | null>(null);
+  const [images, setImages] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [whatsAppUrl, setWhatsAppUrl] = useState<string | null>(null);
@@ -110,7 +112,7 @@ export function BookingForm({
       customer_name: "",
       phone: "",
       address: "",
-      shoe_items: [{ shoeType: "", materials: [], otherMaterial: "", color: "" }],
+      shoe_items: [{ brand: "", shoeType: "", materials: [], otherMaterial: "", color: "" }],
       is_express: false,
       service_slug: defaultService || "",
       delivery_method: defaultDelivery === "drop_point" ? "drop_point" : "direct",
@@ -162,16 +164,23 @@ export function BookingForm({
       isExpress: values.is_express
     });
     let imageUrl: string | null = null;
+    let orderImages: string[] = [];
     const supabase = createBrowserSupabaseClient();
 
     try {
-      if (supabase && image) {
-        const extension = image.name.split(".").pop() || "jpg";
-        const path = `orders/${Date.now()}-${values.phone}.${extension}`;
-        const upload = await supabase.storage.from("shoe-photos").upload(path, image);
-        if (!upload.error) {
-          const publicUrl = supabase.storage.from("shoe-photos").getPublicUrl(path);
-          imageUrl = publicUrl.data.publicUrl;
+      if (supabase && images.length) {
+        const uploadedUrls = await Promise.all(
+          images.map(async (file, index) => {
+            const extension = file.name.split(".").pop() || "jpg";
+            const path = `orders/${Date.now()}-${values.phone}-${index + 1}.${extension}`;
+            const upload = await supabase.storage.from("shoe-photos").upload(path, file);
+            if (upload.error) return null;
+            return supabase.storage.from("shoe-photos").getPublicUrl(path).data.publicUrl;
+          })
+        );
+        orderImages = uploadedUrls.filter(Boolean) as string[];
+        if (orderImages.length) {
+          imageUrl = orderImages[0];
         }
       }
 
@@ -194,6 +203,7 @@ export function BookingForm({
         drop_point_id: dropPoint?.id || null,
         drop_point_name: dropPoint?.name || null,
         image_url: imageUrl,
+        order_images: orderImages,
         notes: values.notes || null
       };
 
@@ -274,7 +284,7 @@ export function BookingForm({
             <Button
               type="button"
               variant="outline"
-              onClick={() => append({ shoeType: "", materials: [], otherMaterial: "", color: "" })}
+              onClick={() => append({ brand: "", shoeType: "", materials: [], otherMaterial: "", color: "" })}
               disabled={isSubmitting || isSubmitted}
             >
               <Plus size={16} /> Tambah Sepatu
@@ -297,7 +307,14 @@ export function BookingForm({
                     <Trash2 size={16} /> Hapus
                   </Button>
                 </div>
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-3">
+                  <Field label="Merek sepatu" error={errors.shoe_items?.[index]?.brand?.message}>
+                    <Input
+                      {...register(`shoe_items.${index}.brand`)}
+                      placeholder="Nike, Adidas, Converse"
+                      disabled={isSubmitting || isSubmitted}
+                    />
+                  </Field>
                   <Field label="Jenis sepatu" error={errors.shoe_items?.[index]?.shoeType?.message}>
                     <Input
                       {...register(`shoe_items.${index}.shoeType`)}
@@ -425,9 +442,13 @@ export function BookingForm({
           <Input
             type="file"
             accept="image/*"
-            onChange={(event) => setImage(event.target.files?.[0] || null)}
+            multiple
+            onChange={(event) => setImages(Array.from(event.target.files || []))}
             disabled={isSubmitting || isSubmitted}
           />
+          {images.length ? (
+            <p className="mt-2 text-sm font-semibold text-neutral-500">{images.length} foto dipilih.</p>
+          ) : null}
         </Field>
 
         <Field label="Catatan tambahan" error={errors.notes?.message}>

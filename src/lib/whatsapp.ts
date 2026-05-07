@@ -24,7 +24,7 @@ export function createBookingMessage(data: {
     ? data.shoeItems
         .map((item, index) => {
           const materials = [...(item.materials || []), item.otherMaterial].filter(Boolean).join(", ") || "-";
-          return `${index + 1}. Jenis: ${item.shoeType || "-"} | Bahan: ${materials} | Warna: ${item.color || "-"}`;
+          return `${index + 1}. Merek: ${item.brand || "-"} | Jenis: ${item.shoeType || "-"} | Bahan: ${materials} | Warna: ${item.color || "-"}`;
         })
         .join("\n")
     : `Jenis Sepatu: ${data.shoeType || "-"}\nBahan/Warna: ${data.shoeMaterial || "-"}`;
