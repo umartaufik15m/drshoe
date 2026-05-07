@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { OrdersManager } from "@/components/admin/OrdersManager";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import type { FranchiseInquiry, Order } from "@/lib/types";
 
@@ -56,13 +57,16 @@ export function AdminDashboard() {
   ];
 
   return (
-    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {cards.map(([label, value]) => (
-        <Card key={label} className="p-6">
-          <p className="text-sm font-black uppercase text-neutral-500">{label}</p>
-          <p className="mt-4 text-5xl font-black">{value}</p>
-        </Card>
-      ))}
+    <div className="grid gap-6">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {cards.map(([label, value]) => (
+          <Card key={label} className="p-6">
+            <p className="text-sm font-black uppercase text-neutral-500">{label}</p>
+            <p className="mt-4 text-5xl font-black">{value}</p>
+          </Card>
+        ))}
+      </div>
+      <OrdersManager title="Order Terbaru" limit={8} />
     </div>
   );
 }

@@ -49,7 +49,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                   href={link.href}
                   className={cn(
                     "rounded-2xl px-4 py-3 text-sm font-bold text-neutral-600 hover:bg-neutral-100 hover:text-black",
-                    pathname === link.href && "bg-black text-white hover:bg-black hover:text-white"
+                    pathname === link.href && "bg-black !text-white hover:bg-black hover:!text-white"
                   )}
                 >
                   {link.label}
