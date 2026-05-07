@@ -11,6 +11,7 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
 import { deliveryMethodLabels, WHATSAPP_NUMBER } from "@/lib/constants";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import type { DropPoint, Service } from "@/lib/types";
@@ -224,6 +225,11 @@ export function BookingForm({
               <a href={whatsAppUrl} target="_blank" rel="noreferrer">
                 <MessageCircle size={18} /> Lanjut ke WhatsApp
               </a>
+            </Button>
+          ) : null}
+          {whatsAppUrl ? (
+            <Button asChild variant="ghost">
+              <Link href="/status">Cek Status Booking</Link>
             </Button>
           ) : null}
         </div>

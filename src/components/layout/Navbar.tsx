@@ -12,7 +12,8 @@ const navItems = [
   { href: "/#layanan", label: "Layanan" },
   { href: "/drop-point", label: "Drop Point" },
   { href: "/franchise", label: "Franchise" },
-  { href: "/booking", label: "Booking" }
+  { href: "/booking", label: "Booking" },
+  { href: "/status", label: "Cek Status" }
 ];
 
 export function Navbar() {

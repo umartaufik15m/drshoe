@@ -58,6 +58,7 @@ Build Command: npm run vercel-build
 
 - `/`
 - `/booking`
+- `/status`
 - `/franchise`
 - `/drop-point`
 - `/admin/login`
@@ -67,3 +68,26 @@ Build Command: npm run vercel-build
 - `/admin/services`
 - `/admin/drop-points`
 - `/admin/testimonials`
+
+## Admin Login
+
+Admin login uses Supabase Auth.
+
+1. Open Supabase Dashboard.
+2. Go to Authentication, then create a user with email and password.
+3. Copy the created user's UID.
+4. Run this SQL in Supabase SQL Editor:
+
+```sql
+insert into public.admin_profiles (id, full_name, role)
+values ('PASTE_AUTH_USER_UID_HERE', 'Admin DR. SHOE', 'admin')
+on conflict (id) do update set
+  full_name = excluded.full_name,
+  role = excluded.role;
+```
+
+5. Login at `/admin/login` using the email and password from step 2.
+
+## Customer Status
+
+Customers can check booking status at `/status` using the same WhatsApp number used for booking. This lookup is handled by a server route using `SUPABASE_SERVICE_ROLE_KEY`; do not expose the service role key in the browser.

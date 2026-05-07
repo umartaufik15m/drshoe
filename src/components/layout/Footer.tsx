@@ -17,6 +17,7 @@ export function Footer() {
           <p className="font-black">Menu</p>
           <div className="mt-4 grid gap-3 text-sm text-neutral-300">
             <Link href="/booking">Booking</Link>
+            <Link href="/status">Cek Status</Link>
             <Link href="/drop-point">Drop Point</Link>
             <Link href="/franchise">Franchise</Link>
             <Link href="/admin/login">Admin</Link>
