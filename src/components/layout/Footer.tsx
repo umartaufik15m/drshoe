@@ -3,12 +3,21 @@ import { Globe2, Music2 } from "lucide-react";
 import { BRAND_NAME, CAMPAIGN_PHRASE, INSTAGRAM_URL, TIKTOK_URL, WORKSHOP_MAPS_URL } from "@/lib/constants";
 import { defaultWhatsAppUrl } from "@/lib/whatsapp";
 
+const logoUrl = "/images/main logo.jpeg";
+
 export function Footer() {
   return (
     <footer className="border-t border-neutral-200 bg-black py-12 text-white">
       <div className="container grid gap-8 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <p className="text-2xl font-black">{BRAND_NAME}</p>
+          <div className="flex items-center gap-3">
+            <img
+              src={logoUrl}
+              alt="DR. SHOE"
+              className="h-14 w-14 rounded-2xl border border-white/10 bg-white object-contain p-1"
+            />
+            <p className="text-2xl font-black">{BRAND_NAME}</p>
+          </div>
           <p className="mt-3 max-w-md text-sm leading-6 text-neutral-300">
             Shoes Laundry & Treatment profesional di Bekasi. {CAMPAIGN_PHRASE}.
           </p>

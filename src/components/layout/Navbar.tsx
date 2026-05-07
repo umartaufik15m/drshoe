@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/constants";
 import { defaultWhatsAppUrl } from "@/lib/whatsapp";
 
+const logoUrl = "/images/main logo.jpeg";
+
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/#layanan", label: "Layanan" },
@@ -23,9 +25,11 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/92 backdrop-blur">
       <div className="container flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-black text-sm font-black text-[var(--brand)]">
-            DS
-          </div>
+          <img
+            src={logoUrl}
+            alt="DR. SHOE"
+            className="h-12 w-12 rounded-2xl border border-neutral-200 bg-white object-contain p-1 shadow-sm"
+          />
           <div>
             <p className="text-lg font-black tracking-normal">{BRAND_NAME}</p>
             <p className="hidden text-xs font-semibold text-neutral-500 sm:block">{BRAND_TAGLINE}</p>
