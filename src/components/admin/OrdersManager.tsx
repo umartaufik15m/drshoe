@@ -126,7 +126,12 @@ export function OrdersManager({ title = "Orders", limit }: { title?: string; lim
                 <td className="p-4 font-semibold">{prettyDate(order.created_at)}</td>
                 <td className="p-4 font-black">{order.customer_name}</td>
                 <td className="p-4">{order.phone}</td>
-                <td className="p-4">{order.service_name || "-"}</td>
+                <td className="p-4">
+                  {order.service_name || "-"}
+                  {order.shoe_material ? (
+                    <p className="mt-1 max-w-72 text-xs font-semibold text-neutral-500">{order.shoe_material}</p>
+                  ) : null}
+                </td>
                 <td className="p-4">{deliveryMethodLabels[order.delivery_method]}</td>
                 <td className="p-4">{order.drop_point_name || "-"}</td>
                 <td className="p-4 font-black">

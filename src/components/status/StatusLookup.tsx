@@ -8,23 +8,32 @@ import { Card } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { deliveryMethodLabels, orderStatusLabels } from "@/lib/constants";
+import type { ShoeBookingItem } from "@/lib/pricing";
 import type { DeliveryMethod, OrderStatus } from "@/lib/types";
-import { prettyDate } from "@/lib/utils";
+import { formatRupiah, prettyDate } from "@/lib/utils";
 
 type StatusOrder = {
   id: string;
   customer_name: string;
   phone: string;
   service_name: string | null;
+  service_price?: number | null;
   quantity: number;
+  shoe_items?: ShoeBookingItem[] | null;
   delivery_method: DeliveryMethod;
   drop_point_name: string | null;
   status: OrderStatus;
+  surcharge_total?: number | null;
   estimated_total?: number | null;
   is_express?: boolean | null;
+  express_surcharge_total?: number | null;
   created_at: string | null;
   updated_at: string | null;
 };
+
+function materialLabel(item: ShoeBookingItem) {
+  return [...(item.materials || []), item.otherMaterial].filter(Boolean).join(", ") || "-";
+}
 
 export function StatusLookup() {
   const [phone, setPhone] = useState("");
@@ -88,15 +97,37 @@ export function StatusLookup() {
                 </p>
                 {order.estimated_total ? (
                   <p className="mt-2 text-sm font-black text-neutral-900">
-                    Estimasi total: {new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                      maximumFractionDigits: 0
-                    }).format(order.estimated_total)}
+                    Total nota: {formatRupiah(order.estimated_total)}
                   </p>
                 ) : null}
               </div>
               <Badge className="bg-yellow-200 text-black">{orderStatusLabels[order.status]}</Badge>
+            </div>
+            <div className="mt-5 rounded-2xl bg-neutral-100 p-4">
+              <p className="text-sm font-black text-neutral-900">Nota / kuitansi</p>
+              <div className="mt-3 grid gap-2 text-sm font-semibold text-neutral-700">
+                <p>
+                  Layanan: {order.service_name || "-"}{" "}
+                  {order.service_price ? `(${formatRupiah(order.service_price)} x ${order.quantity} pasang)` : ""}
+                </p>
+                {order.shoe_items?.length ? (
+                  <div className="grid gap-2">
+                    {order.shoe_items.map((item, index) => (
+                      <div key={index} className="rounded-2xl border border-neutral-200 bg-white p-3">
+                        <p className="font-black text-neutral-900">Sepatu {index + 1}</p>
+                        <p>Jenis: {item.shoeType || "-"}</p>
+                        <p>Bahan: {materialLabel(item)}</p>
+                        <p>Warna: {item.color || "-"}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+                <p>Tambahan bahan/warna/jenis: {formatRupiah(order.surcharge_total || 0)}</p>
+                <p>Cuci ekspres: {formatRupiah(order.express_surcharge_total || 0)}</p>
+                <p className="text-base font-black text-black">
+                  Total estimasi: {formatRupiah(order.estimated_total || 0)}
+                </p>
+              </div>
             </div>
             <div className="mt-4 grid gap-2 text-sm text-neutral-600 sm:grid-cols-2">
               <p>Dibuat: {prettyDate(order.created_at)}</p>

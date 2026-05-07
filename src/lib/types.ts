@@ -60,6 +60,7 @@ export type Order = {
   customer_name: string;
   phone: string;
   address?: string | null;
+  shoe_items?: import("@/lib/pricing").ShoeBookingItem[] | null;
   shoe_type?: string | null;
   shoe_material?: string | null;
   service_id?: string | null;

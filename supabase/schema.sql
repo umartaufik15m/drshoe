@@ -32,6 +32,7 @@ create table if not exists public.orders (
   customer_name text not null,
   phone text not null,
   address text,
+  shoe_items jsonb default '[]'::jsonb,
   shoe_type text,
   shoe_material text,
   service_id uuid references public.services(id) on delete set null,
@@ -54,6 +55,9 @@ create table if not exists public.orders (
 
 alter table public.orders
 add column if not exists service_price int;
+
+alter table public.orders
+add column if not exists shoe_items jsonb default '[]'::jsonb;
 
 alter table public.orders
 add column if not exists surcharge_total int default 0;

@@ -1,4 +1,5 @@
 import { WHATSAPP_NUMBER } from "@/lib/constants";
+import type { ShoeBookingItem } from "@/lib/pricing";
 
 export function createWhatsAppUrl(phone: string, message: string) {
   const encoded = encodeURIComponent(message);
@@ -11,6 +12,7 @@ export function createBookingMessage(data: {
   quantity: number;
   shoeType?: string;
   shoeMaterial?: string;
+  shoeItems?: ShoeBookingItem[];
   deliveryMethod: string;
   dropPointName?: string;
   surchargeInfo?: string;
@@ -18,13 +20,22 @@ export function createBookingMessage(data: {
   estimatedTotal?: string;
   notes?: string;
 }) {
+  const itemLines = data.shoeItems?.length
+    ? data.shoeItems
+        .map((item, index) => {
+          const materials = [...(item.materials || []), item.otherMaterial].filter(Boolean).join(", ") || "-";
+          return `${index + 1}. Jenis: ${item.shoeType || "-"} | Bahan: ${materials} | Warna: ${item.color || "-"}`;
+        })
+        .join("\n")
+    : `Jenis Sepatu: ${data.shoeType || "-"}\nBahan/Warna: ${data.shoeMaterial || "-"}`;
+
   return `
 Halo DR. SHOE, saya ingin booking treatment sepatu.
 Nama: ${data.customerName}
 Layanan: ${data.serviceName}
 Jumlah: ${data.quantity}
-Jenis Sepatu: ${data.shoeType || "-"}
-Bahan/Warna: ${data.shoeMaterial || "-"}
+Detail Sepatu:
+${itemLines}
 Metode Pengiriman: ${data.deliveryMethod}
 Drop Point: ${data.dropPointName || "-"}
 Tambahan Biaya: ${data.surchargeInfo || "-"}
