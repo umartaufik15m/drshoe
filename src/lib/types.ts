@@ -64,7 +64,12 @@ export type Order = {
   shoe_material?: string | null;
   service_id?: string | null;
   service_name?: string | null;
+  service_price?: number | null;
   quantity: number;
+  surcharge_total?: number | null;
+  is_express?: boolean | null;
+  express_surcharge_total?: number | null;
+  estimated_total?: number | null;
   delivery_method: DeliveryMethod;
   drop_point_id?: string | null;
   drop_point_name?: string | null;

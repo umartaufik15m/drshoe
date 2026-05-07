@@ -9,8 +9,13 @@ export function createBookingMessage(data: {
   customerName: string;
   serviceName: string;
   quantity: number;
+  shoeType?: string;
+  shoeMaterial?: string;
   deliveryMethod: string;
   dropPointName?: string;
+  surchargeInfo?: string;
+  expressInfo?: string;
+  estimatedTotal?: string;
   notes?: string;
 }) {
   return `
@@ -18,8 +23,13 @@ Halo DR. SHOE, saya ingin booking treatment sepatu.
 Nama: ${data.customerName}
 Layanan: ${data.serviceName}
 Jumlah: ${data.quantity}
+Jenis Sepatu: ${data.shoeType || "-"}
+Bahan/Warna: ${data.shoeMaterial || "-"}
 Metode Pengiriman: ${data.deliveryMethod}
 Drop Point: ${data.dropPointName || "-"}
+Tambahan Biaya: ${data.surchargeInfo || "-"}
+Cuci Ekspres: ${data.expressInfo || "-"}
+Estimasi Total: ${data.estimatedTotal || "-"}
 Catatan: ${data.notes || "-"}
   `.trim();
 }

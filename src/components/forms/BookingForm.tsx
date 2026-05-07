@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, MessageCircle } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,15 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { deliveryMethodLabels, WHATSAPP_NUMBER } from "@/lib/constants";
+import {
+  calculateBookingPrice,
+  EXPRESS_EXCLUDED_SERVICE_SLUGS,
+  EXPRESS_SURCHARGE,
+  SPECIAL_SHOE_SURCHARGE
+} from "@/lib/pricing";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import type { DropPoint, Service } from "@/lib/types";
+import { formatRupiah } from "@/lib/utils";
 import { createBookingMessage, createWhatsAppUrl } from "@/lib/whatsapp";
 
 const schema = z
@@ -25,6 +32,7 @@ const schema = z
     shoe_type: z.string().optional(),
     shoe_material: z.string().optional(),
     quantity: z.coerce.number().min(1, "Jumlah minimal 1 pasang."),
+    is_express: z.preprocess((value) => value === "on" || value === true, z.boolean()).optional(),
     service_slug: z.string().min(1, "Pilih layanan terlebih dahulu."),
     delivery_method: z.enum(["direct", "pickup", "drop_point"], {
       message: "Pilih metode pengiriman."
@@ -61,6 +69,7 @@ export function BookingForm({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [whatsAppUrl, setWhatsAppUrl] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const submitLockRef = useRef(false);
 
   const {
     register,
@@ -71,6 +80,7 @@ export function BookingForm({
     resolver: zodResolver(schema),
     defaultValues: {
       quantity: 1,
+      is_express: false,
       service_slug: defaultService || "",
       delivery_method: defaultDelivery === "drop_point" ? "drop_point" : "direct",
       drop_point_slug: ""
@@ -78,18 +88,44 @@ export function BookingForm({
   });
 
   const deliveryMethod = watch("delivery_method");
+  const selectedServiceSlug = watch("service_slug");
+  const quantity = watch("quantity");
+  const shoeType = watch("shoe_type");
+  const shoeMaterial = watch("shoe_material");
+  const isExpress = watch("is_express");
 
   const serviceOptions = useMemo(() => services, [services]);
   const dropPointOptions = useMemo(() => dropPoints, [dropPoints]);
+  const selectedService = services.find((item) => item.slug === selectedServiceSlug);
+  const isExpressEligible = selectedService
+    ? !EXPRESS_EXCLUDED_SERVICE_SLUGS.includes(selectedService.slug)
+    : true;
+  const pricePreview = calculateBookingPrice({
+    servicePrice: selectedService?.price,
+    serviceSlug: selectedService?.slug,
+    quantity: Number(quantity || 1),
+    shoeType,
+    shoeMaterial,
+    isExpress: Boolean(isExpress) && isExpressEligible
+  });
 
   async function onSubmit(values: BookingValues) {
-    if (isSubmitted) return;
+    if (submitLockRef.current || isSubmitted) return;
 
+    submitLockRef.current = true;
     setIsSubmitting(true);
     setNotice(null);
 
     const service = services.find((item) => item.slug === values.service_slug);
     const dropPoint = dropPoints.find((item) => item.slug === values.drop_point_slug);
+    const pricing = calculateBookingPrice({
+      servicePrice: service?.price,
+      serviceSlug: service?.slug,
+      quantity: values.quantity,
+      shoeType: values.shoe_type,
+      shoeMaterial: values.shoe_material,
+      isExpress: values.is_express
+    });
     let imageUrl: string | null = null;
     const supabase = createBrowserSupabaseClient();
 
@@ -113,7 +149,12 @@ export function BookingForm({
           shoe_material: values.shoe_material || null,
           service_id: service?.id || null,
           service_name: service?.name || values.service_slug,
+          service_price: service?.price || null,
           quantity: values.quantity,
+          surcharge_total: pricing.surchargeTotal,
+          is_express: pricing.expressSurchargeTotal > 0,
+          express_surcharge_total: pricing.expressSurchargeTotal,
+          estimated_total: pricing.total,
           delivery_method: values.delivery_method,
           drop_point_id: dropPoint?.id || null,
           drop_point_name: dropPoint?.name || null,
@@ -127,8 +168,21 @@ export function BookingForm({
         customerName: values.customer_name,
         serviceName: service?.name || values.service_slug,
         quantity: values.quantity,
+        shoeType: values.shoe_type,
+        shoeMaterial: values.shoe_material,
         deliveryMethod: deliveryMethodLabels[values.delivery_method],
         dropPointName: dropPoint?.name,
+        surchargeInfo:
+          pricing.surchargeTotal > 0
+            ? `${formatRupiah(SPECIAL_SHOE_SURCHARGE)} x ${values.quantity} pasang (${pricing.reasons.join(", ")})`
+            : "-",
+        expressInfo:
+          pricing.expressSurchargeTotal > 0
+            ? `${formatRupiah(EXPRESS_SURCHARGE)} x ${values.quantity} pasang`
+            : pricing.isExpressEligible
+              ? "-"
+              : "Tidak tersedia untuk Unyellowing/Repaint",
+        estimatedTotal: formatRupiah(pricing.total),
         notes: values.notes
       });
       setWhatsAppUrl(createWhatsAppUrl(WHATSAPP_NUMBER, message));
@@ -139,6 +193,7 @@ export function BookingForm({
           : "Mode demo aktif karena Supabase belum dikonfigurasi. Lanjutkan ke WhatsApp untuk konfirmasi admin."
       );
     } catch (error) {
+      submitLockRef.current = false;
       setNotice(error instanceof Error ? error.message : "Gagal menyimpan booking. Coba lagi.");
     } finally {
       setIsSubmitting(false);
@@ -163,10 +218,10 @@ export function BookingForm({
 
         <div className="grid gap-5 md:grid-cols-3">
           <Field label="Jenis sepatu" error={errors.shoe_type?.message}>
-            <Input {...register("shoe_type")} placeholder="Sneakers, running, kulit" />
+            <Input {...register("shoe_type")} placeholder="Sneakers, outdoor, running" />
           </Field>
           <Field label="Bahan sepatu" error={errors.shoe_material?.message}>
-            <Input {...register("shoe_material")} placeholder="Canvas, suede, leather" />
+            <Input {...register("shoe_material")} placeholder="Canvas putih, suede, kulit" />
           </Field>
           <Field label="Jumlah pasang" error={errors.quantity?.message}>
             <Input type="number" min={1} {...register("quantity", { valueAsNumber: true })} />
@@ -205,6 +260,45 @@ export function BookingForm({
             </Select>
           </Field>
         ) : null}
+
+        <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-neutral-200 bg-white p-4">
+          <input
+            type="checkbox"
+            {...register("is_express")}
+            className="mt-1 h-5 w-5 shrink-0 accent-black"
+            disabled={isSubmitting || isSubmitted || !isExpressEligible}
+          />
+          <span>
+            <span className="block text-sm font-black text-neutral-900">Cuci ekspres</span>
+            <span className="mt-1 block text-sm font-semibold leading-6 text-neutral-600">
+              {isExpressEligible
+                ? `Tambahan ${formatRupiah(EXPRESS_SURCHARGE)} per pasang untuk pengerjaan lebih cepat sesuai antrean dan kondisi sepatu.`
+                : "Tidak tersedia untuk layanan Unyellowing dan Repaint."}
+            </span>
+          </span>
+        </label>
+
+        <div className="rounded-2xl border border-neutral-200 bg-neutral-100 p-4">
+          <p className="text-sm font-black text-neutral-900">Estimasi biaya</p>
+          <div className="mt-3 grid gap-2 text-sm font-semibold text-neutral-700">
+            <p>Layanan: {selectedService ? formatRupiah(selectedService.price) : "Pilih layanan dulu"}</p>
+            <p>
+              Tambahan khusus:{" "}
+              {pricePreview.surchargeTotal > 0
+                ? `${formatRupiah(SPECIAL_SHOE_SURCHARGE)} x ${Number(quantity || 1)} pasang (${pricePreview.reasons.join(", ")})`
+                : `Rp0. Tambahan ${formatRupiah(SPECIAL_SHOE_SURCHARGE)} berlaku untuk sepatu putih, suede, kulit, atau outdoor.`}
+            </p>
+            <p>
+              Cuci ekspres:{" "}
+              {!pricePreview.isExpressEligible
+                ? "Tidak tersedia untuk layanan ini"
+                : pricePreview.expressSurchargeTotal > 0
+                  ? `${formatRupiah(EXPRESS_SURCHARGE)} x ${Number(quantity || 1)} pasang`
+                  : "Rp0"}
+            </p>
+            <p className="text-lg font-black text-black">Total estimasi: {formatRupiah(pricePreview.total)}</p>
+          </div>
+        </div>
 
         <Field label="Upload foto sepatu">
           <Input type="file" accept="image/*" onChange={(event) => setImage(event.target.files?.[0] || null)} />

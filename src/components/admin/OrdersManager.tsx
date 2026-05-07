@@ -9,6 +9,7 @@ import { deliveryMethodLabels, orderStatusLabels, WHATSAPP_NUMBER } from "@/lib/
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import type { Order, OrderStatus } from "@/lib/types";
 import { prettyDate } from "@/lib/utils";
+import { formatRupiah } from "@/lib/utils";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
 
 const statusDescriptions: Record<OrderStatus, string> = {
@@ -100,6 +101,7 @@ export function OrdersManager({ title = "Orders", limit }: { title?: string; lim
               <th className="p-4">Service</th>
               <th className="p-4">Delivery</th>
               <th className="p-4">Drop Point</th>
+              <th className="p-4">Total</th>
               <th className="p-4">Status</th>
               <th className="p-4">Action</th>
             </tr>
@@ -107,14 +109,14 @@ export function OrdersManager({ title = "Orders", limit }: { title?: string; lim
           <tbody>
             {loading ? (
               <tr>
-                <td className="p-5 text-sm font-bold text-neutral-500" colSpan={8}>
+                <td className="p-5 text-sm font-bold text-neutral-500" colSpan={9}>
                   Memuat data order...
                 </td>
               </tr>
             ) : null}
             {!loading && orders.length === 0 ? (
               <tr>
-                <td className="p-5 text-sm font-bold text-neutral-500" colSpan={8}>
+                <td className="p-5 text-sm font-bold text-neutral-500" colSpan={9}>
                   Belum ada order yang masuk. Coba submit booking dari halaman customer, lalu refresh halaman admin.
                 </td>
               </tr>
@@ -127,6 +129,19 @@ export function OrdersManager({ title = "Orders", limit }: { title?: string; lim
                 <td className="p-4">{order.service_name || "-"}</td>
                 <td className="p-4">{deliveryMethodLabels[order.delivery_method]}</td>
                 <td className="p-4">{order.drop_point_name || "-"}</td>
+                <td className="p-4 font-black">
+                  {order.estimated_total ? formatRupiah(order.estimated_total) : "-"}
+                  {order.surcharge_total ? (
+                    <p className="mt-1 text-xs font-semibold text-neutral-500">
+                      Termasuk tambahan {formatRupiah(order.surcharge_total)}
+                    </p>
+                  ) : null}
+                  {order.express_surcharge_total ? (
+                    <p className="mt-1 text-xs font-semibold text-neutral-500">
+                      Ekspres {formatRupiah(order.express_surcharge_total)}
+                    </p>
+                  ) : null}
+                </td>
                 <td className="p-4">
                   <div className="grid min-w-48 gap-2">
                     <Badge className={statusBadgeClass[order.status]}>{orderStatusLabels[order.status]}</Badge>

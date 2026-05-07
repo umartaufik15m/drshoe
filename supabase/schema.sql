@@ -36,7 +36,12 @@ create table if not exists public.orders (
   shoe_material text,
   service_id uuid references public.services(id) on delete set null,
   service_name text,
+  service_price int,
   quantity int default 1,
+  surcharge_total int default 0,
+  is_express boolean default false,
+  express_surcharge_total int default 0,
+  estimated_total int,
   delivery_method text check (delivery_method in ('direct', 'pickup', 'drop_point')) default 'direct',
   drop_point_id uuid references public.drop_points(id) on delete set null,
   drop_point_name text,
@@ -46,6 +51,21 @@ create table if not exists public.orders (
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+alter table public.orders
+add column if not exists service_price int;
+
+alter table public.orders
+add column if not exists surcharge_total int default 0;
+
+alter table public.orders
+add column if not exists is_express boolean default false;
+
+alter table public.orders
+add column if not exists express_surcharge_total int default 0;
+
+alter table public.orders
+add column if not exists estimated_total int;
 
 create table if not exists public.franchise_inquiries (
   id uuid primary key default gen_random_uuid(),

@@ -20,6 +20,8 @@ type StatusOrder = {
   delivery_method: DeliveryMethod;
   drop_point_name: string | null;
   status: OrderStatus;
+  estimated_total?: number | null;
+  is_express?: boolean | null;
   created_at: string | null;
   updated_at: string | null;
 };
@@ -82,7 +84,17 @@ export function StatusLookup() {
                 <p className="mt-1 text-sm font-semibold text-neutral-600">
                   {order.quantity} pasang - {deliveryMethodLabels[order.delivery_method]}
                   {order.drop_point_name ? ` - ${order.drop_point_name}` : ""}
+                  {order.is_express ? " - Cuci ekspres" : ""}
                 </p>
+                {order.estimated_total ? (
+                  <p className="mt-2 text-sm font-black text-neutral-900">
+                    Estimasi total: {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      maximumFractionDigits: 0
+                    }).format(order.estimated_total)}
+                  </p>
+                ) : null}
               </div>
               <Badge className="bg-yellow-200 text-black">{orderStatusLabels[order.status]}</Badge>
             </div>

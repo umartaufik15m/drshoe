@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   }
 
   const selectColumns =
-    "id, customer_name, phone, service_name, quantity, delivery_method, drop_point_name, status, created_at, updated_at";
+    "id, customer_name, phone, service_name, quantity, delivery_method, drop_point_name, status, estimated_total, is_express, created_at, updated_at";
   const variants = phoneVariants(phone || "");
   let { data, error } = await supabase
     .from("orders")
