@@ -84,16 +84,22 @@ export const fallbackBeforeAfter: BeforeAfter[] = [
   {
     title: "Sneakers Daily Wear",
     service_name: "Deep Clean",
+    before_image_url: "/images/results/deep-clean-before.jpg",
+    after_image_url: "/images/results/deep-clean-after.jpg",
     description: "Upper, midsole, dan outsole dibersihkan menyeluruh."
   },
   {
     title: "White Sole Recovery",
     service_name: "Unyellowing",
+    before_image_url: "/images/results/unyellowing-before.jpg",
+    after_image_url: "/images/results/unyellowing-after.jpg",
     description: "Treatment untuk mengurangi tampilan sol yang menguning."
   },
   {
     title: "Canvas Refresh",
     service_name: "Fast Clean",
+    before_image_url: "/images/results/fast-clean-before.jpg",
+    after_image_url: "/images/results/fast-clean-after.jpg",
     description: "Cleaning cepat untuk noda ringan pada sepatu harian."
   }
 ];

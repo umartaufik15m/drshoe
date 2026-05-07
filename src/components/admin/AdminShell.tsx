@@ -14,8 +14,7 @@ const links = [
   { href: "/admin/franchise", label: "Franchise" },
   { href: "/admin/services", label: "Services" },
   { href: "/admin/drop-points", label: "Drop Points" },
-  { href: "/admin/testimonials", label: "Testimonials" },
-  { href: "/admin/before-after", label: "Before After" }
+  { href: "/admin/testimonials", label: "Testimonials" }
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
