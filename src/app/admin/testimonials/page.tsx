@@ -1,10 +1,5 @@
-import { ContentManager } from "@/components/admin/ContentManager";
-import { AdminShell } from "@/components/admin/AdminShell";
+import { redirect } from "next/navigation";
 
 export default function AdminTestimonialsPage() {
-  return (
-    <AdminShell>
-      <ContentManager kind="testimonials" />
-    </AdminShell>
-  );
+  redirect("/admin");
 }

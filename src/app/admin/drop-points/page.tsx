@@ -1,10 +1,5 @@
-import { ContentManager } from "@/components/admin/ContentManager";
-import { AdminShell } from "@/components/admin/AdminShell";
+import { redirect } from "next/navigation";
 
 export default function AdminDropPointsPage() {
-  return (
-    <AdminShell>
-      <ContentManager kind="drop_points" />
-    </AdminShell>
-  );
+  redirect("/admin");
 }

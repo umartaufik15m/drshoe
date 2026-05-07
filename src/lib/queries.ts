@@ -10,14 +10,14 @@ export async function getServices(): Promise<Service[]> {
     .select("*")
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
-  return error || !data?.length ? fallbackServices : data;
+  return error ? [] : data || [];
 }
 
 export async function getDropPoints(): Promise<DropPoint[]> {
   const supabase = createServiceSupabaseClient();
   if (!supabase) return fallbackDropPoints;
   const { data, error } = await supabase.from("drop_points").select("*").eq("is_active", true);
-  return error || !data?.length ? fallbackDropPoints : data;
+  return error ? [] : data || [];
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {
@@ -28,7 +28,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     .select("*")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
-  return error || !data?.length ? fallbackTestimonials : data;
+  return error ? [] : data || [];
 }
 
 export async function getBeforeAfter(): Promise<BeforeAfter[]> {
@@ -39,5 +39,5 @@ export async function getBeforeAfter(): Promise<BeforeAfter[]> {
     .select("*")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
-  return error || !data?.length ? fallbackBeforeAfter : data;
+  return error ? [] : data || [];
 }

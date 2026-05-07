@@ -24,13 +24,13 @@ export default async function HomePage() {
     <>
       <HeroSection />
       <AboutSection />
-      <ServicesSection services={services} />
+      {services.length ? <ServicesSection services={services} /> : null}
       <AdvantagesSection />
-      <DropPointSection dropPoints={dropPoints} />
+      {dropPoints.length ? <DropPointSection dropPoints={dropPoints} /> : null}
       <FranchiseSection />
       <OrderFlowSection />
-      <BeforeAfterSection items={beforeAfter} />
-      <TestimonialsSection testimonials={testimonials} />
+      {beforeAfter.length ? <BeforeAfterSection items={beforeAfter} /> : null}
+      {testimonials.length ? <TestimonialsSection testimonials={testimonials} /> : null}
       <FAQSection />
       <FinalCTASection />
       <FranchiseCTASection />

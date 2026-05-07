@@ -6,7 +6,7 @@ export default async function DropPointPage() {
   const dropPoints = await getDropPoints();
   return (
     <>
-      <DropPointSection dropPoints={dropPoints} />
+      {dropPoints.length ? <DropPointSection dropPoints={dropPoints} /> : null}
       <OrderFlowSection />
     </>
   );

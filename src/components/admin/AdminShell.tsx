@@ -11,10 +11,7 @@ import { cn } from "@/lib/utils";
 const links = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/orders", label: "Orders" },
-  { href: "/admin/franchise", label: "Franchise" },
-  { href: "/admin/services", label: "Services" },
-  { href: "/admin/drop-points", label: "Drop Points" },
-  { href: "/admin/testimonials", label: "Testimonials" }
+  { href: "/admin/franchise", label: "Franchise" }
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
