@@ -5,8 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { BRAND_TAGLINE, CAMPAIGN_PHRASE } from "@/lib/constants";
 
 export function HeroSection() {
-  const heroBefore = "/images/hero-before.png";
-  const heroAfter = "/images/hero-after.png";
+  const heroBefore = "/images/hero-before.jpg";
+  const heroAfter = "/images/hero-after.jpg";
 
   return (
     <section className="overflow-hidden bg-white py-16 md:py-24">
@@ -47,22 +47,35 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="grid gap-4 rounded-[2rem] border border-neutral-200 bg-neutral-100 p-4 shadow-sm sm:grid-cols-2">
-          <div className="rounded-[1.5rem] bg-white p-3 shadow-sm">
-            <p className="mb-3 text-xs font-black uppercase text-neutral-500">Before</p>
+        <div className="relative rounded-[2rem] border border-neutral-200 bg-white p-3 shadow-[0_24px_80px_rgba(0,0,0,0.09)]">
+          <div className="absolute -right-3 -top-3 z-10 rounded-full border border-black bg-[var(--brand)] px-4 py-2 text-xs font-black uppercase text-black shadow-sm">
+            Real Treatment
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="relative overflow-hidden rounded-[1.5rem] border border-neutral-200 bg-neutral-100">
             <img
               src={heroBefore}
               alt="Sepatu sebelum treatment DR. SHOE"
-              className="h-72 w-full rounded-[1.25rem] object-cover"
+              className="aspect-square w-full object-cover"
             />
+            <p className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-black uppercase text-neutral-700 shadow-sm">
+              Before
+            </p>
           </div>
-          <div className="rounded-[1.5rem] border-2 border-black bg-[var(--brand)] p-3 shadow-sm">
-            <p className="mb-3 text-xs font-black uppercase text-black">After</p>
+          <div className="relative overflow-hidden rounded-[1.5rem] border-2 border-black bg-neutral-100">
             <img
               src={heroAfter}
               alt="Sepatu setelah treatment DR. SHOE"
-              className="h-72 w-full rounded-[1.25rem] object-cover"
+              className="aspect-square w-full object-cover"
             />
+            <p className="absolute left-3 top-3 rounded-full bg-[var(--brand)] px-3 py-1 text-xs font-black uppercase text-black shadow-sm">
+              After
+            </p>
+          </div>
+          </div>
+          <div className="mt-3 flex items-center justify-between gap-3 rounded-[1.25rem] bg-neutral-100 px-4 py-3">
+            <p className="text-xs font-black uppercase text-neutral-500">Before / After</p>
+            <p className="text-sm font-black text-black">DR. SHOE Bekasi</p>
           </div>
         </div>
       </div>

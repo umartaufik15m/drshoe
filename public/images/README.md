@@ -1,8 +1,8 @@
 Ganti file gambar di folder ini untuk memakai foto asli.
 
 Hero section:
-- hero-before.png
-- hero-after.png
+- hero-before.jpg
+- hero-after.jpg
 
 Before-after section:
 - results/deep-clean-before.jpg
