@@ -9,17 +9,7 @@ import { createServiceSupabaseClient } from "@/lib/supabase/server";
 import type { BeforeAfter, DropPoint, PromoBanner, Service, Testimonial } from "@/lib/types";
 
 export async function getPromoBanners(): Promise<PromoBanner[]> {
-  const supabase = createServiceSupabaseClient();
-  if (!supabase) return fallbackPromoBanners;
-  const { data, error } = await supabase
-    .from("promo_banners")
-    .select("*")
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true })
-    .limit(3);
-
-  const items = (data || []).filter((item) => item.image_url) as PromoBanner[];
-  return error || !items.length ? fallbackPromoBanners : items;
+  return fallbackPromoBanners;
 }
 
 export async function getServices(): Promise<Service[]> {

@@ -5,10 +5,11 @@ Hero section:
 - hero-after.jpg
 
 Promo banner:
-- Kelola dari `/admin/banners`
+- Ganti file di folder `banner`
 - Resolusi ideal 1920 x 900 px atau 1920 x 1080 px
 - Maksimal 3 slide aktif
 - Banner hanya gambar; tombol Booking dan WhatsApp tampil otomatis dari website
+- Nama file harus `banner-promo-1.png`, `banner-promo-2.png`, dan `banner-promo-3.png`
 - Simpan objek utama di tengah gambar karena banner memenuhi layar dan akan crop otomatis
 
 Before-after section:

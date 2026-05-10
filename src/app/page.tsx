@@ -12,8 +12,6 @@ import { ServicesSection } from "@/components/sections/ServicesSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { getBeforeAfter, getDropPoints, getPromoBanners, getServices, getTestimonials } from "@/lib/queries";
 
-export const dynamic = "force-dynamic";
-
 export default async function HomePage() {
   const [promoBanners, services, dropPoints, testimonials, beforeAfter] = await Promise.all([
     getPromoBanners(),

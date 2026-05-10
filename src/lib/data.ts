@@ -2,23 +2,21 @@ import type { BeforeAfter, DropPoint, PromoBanner, Service, Testimonial } from "
 
 export const fallbackPromoBanners: PromoBanner[] = [
   {
-    title: "Fresh Kicks, Fresh Move",
-    subtitle: "Promo treatment sepatu harian untuk kamu yang aktif, street-ready, dan anti tampil kusam.",
-    badge_text: "Promo Drop",
-    image_url: "/images/hero-after.jpg",
-    cta_label: "Booking Sekarang",
-    cta_href: "/booking",
+    title: "Banner Promo 1",
+    image_url: "/images/banner/banner-promo-1.png",
     sort_order: 1,
     is_active: true
   },
   {
-    title: "Before Kotor, After Pop",
-    subtitle: "Deep Clean, Fast Clean, dan Repaint dengan sentuhan rapi dari tim DR. SHOE Bekasi.",
-    badge_text: "Street Care",
-    image_url: "/images/hero-before.jpg",
-    cta_label: "Lihat Layanan",
-    cta_href: "/#layanan",
+    title: "Banner Promo 2",
+    image_url: "/images/banner/banner-promo-2.png",
     sort_order: 2,
+    is_active: true
+  },
+  {
+    title: "Banner Promo 3",
+    image_url: "/images/banner/banner-promo-3.png",
+    sort_order: 3,
     is_active: true
   }
 ];
