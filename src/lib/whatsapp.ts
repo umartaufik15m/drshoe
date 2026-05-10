@@ -2,8 +2,20 @@ import { WHATSAPP_NUMBER } from "@/lib/constants";
 import type { ShoeBookingItem } from "@/lib/pricing";
 
 export function createWhatsAppUrl(phone: string, message: string) {
+  const normalizedPhone = normalizeWhatsAppPhone(phone);
   const encoded = encodeURIComponent(message);
-  return `https://wa.me/${phone}?text=${encoded}`;
+  return `https://wa.me/${normalizedPhone}?text=${encoded}`;
+}
+
+export function normalizeWhatsAppPhone(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.startsWith("0")) {
+    return `62${digits.slice(1)}`;
+  }
+  if (digits.startsWith("8")) {
+    return `62${digits}`;
+  }
+  return digits;
 }
 
 export function createBookingMessage(data: {

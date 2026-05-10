@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
-import { franchiseStatusLabels, partnershipTypeLabels, WHATSAPP_NUMBER } from "@/lib/constants";
+import { franchiseStatusLabels, partnershipTypeLabels } from "@/lib/constants";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import type { FranchiseInquiry, FranchiseStatus } from "@/lib/types";
 import { prettyDate } from "@/lib/utils";
@@ -89,7 +89,7 @@ export function FranchiseManager() {
                   <Button asChild variant="outline" size="sm">
                     <a
                       href={createWhatsAppUrl(
-                        WHATSAPP_NUMBER,
+                        item.phone,
                         `Halo ${item.full_name}, admin DR. SHOE ingin follow up inquiry ${partnershipTypeLabels[item.partnership_type]}.`
                       )}
                       target="_blank"

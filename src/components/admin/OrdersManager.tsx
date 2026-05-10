@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { deliveryMethodLabels, orderStatusLabels, WHATSAPP_NUMBER } from "@/lib/constants";
+import { deliveryMethodLabels, orderStatusLabels } from "@/lib/constants";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import type { Order, OrderStatus } from "@/lib/types";
 import { prettyDate } from "@/lib/utils";
@@ -176,7 +176,7 @@ export function OrdersManager({ title = "Orders", limit }: { title?: string; lim
                   <Button asChild variant="outline" size="sm">
                     <a
                       href={createWhatsAppUrl(
-                        WHATSAPP_NUMBER,
+                        order.phone,
                         `Halo ${order.customer_name}, admin DR. SHOE ingin konfirmasi order ${order.service_name || "treatment sepatu"}.`
                       )}
                       target="_blank"
