@@ -9,10 +9,10 @@ Promo banner:
 - Desktop: `banner/banner-promo-1.png`, `banner-promo-2.png`, `banner-promo-3.png`
 - Mobile: `banner/mobile/banner-promo-1.png`, `banner-promo-2.png`, `banner-promo-3.png`
 - Resolusi desktop ideal 1920 x 1080 px
-- Resolusi mobile ideal 1080 x 1920 px
+- Resolusi mobile ideal 1080 x 900 px
 - Maksimal 3 slide aktif
 - Banner hanya gambar; tombol Booking dan WhatsApp tampil otomatis dari website
-- Simpan objek utama di tengah gambar karena banner memenuhi layar dan akan crop otomatis
+- Desktop akan crop jika perlu; mobile dibuat terlihat utuh tanpa crop
 
 Before-after section:
 - results/deep-clean-before.jpg

@@ -88,8 +88,8 @@ Use these exact file names for mobile:
 Recommended image size:
 
 - Desktop: `1920 x 1080 px`
-- Mobile: `1080 x 1920 px`
-- Keep the main subject centered because the banner uses `object-cover`
+- Mobile: `1080 x 900 px`
+- Desktop fills the screen with crop if needed; mobile keeps the full image visible
 
 ## Admin Login
 

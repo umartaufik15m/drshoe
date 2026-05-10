@@ -29,8 +29,8 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
   }
 
   return (
-    <section className="relative min-h-[calc(100svh-80px)] overflow-hidden bg-black text-white">
-      <div className="absolute inset-0">
+    <section className="relative overflow-hidden bg-black text-white md:min-h-[calc(100svh-80px)]">
+      <div className="relative aspect-[6/5] w-full overflow-hidden bg-black md:absolute md:inset-0 md:aspect-auto md:h-full">
         {slides.map((banner, index) => (
           <div
             key={`${banner.id || banner.slug || banner.image_url}-${index}`}
@@ -41,15 +41,19 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
           >
             <picture className="block h-full w-full">
               <source media="(max-width: 767px)" srcSet={banner.mobile_image_url || banner.image_url} />
-              <img src={banner.image_url} alt="Banner promo DR. SHOE" className="h-full w-full object-cover" />
+              <img
+                src={banner.image_url}
+                alt="Banner promo DR. SHOE"
+                className="h-full w-full object-contain md:object-cover"
+              />
             </picture>
           </div>
         ))}
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
-      <div className="graffiti-noise absolute inset-0 opacity-25" />
+      <div className="absolute inset-x-0 bottom-0 hidden h-48 bg-gradient-to-t from-black/80 via-black/35 to-transparent md:block" />
+      <div className="graffiti-noise absolute inset-0 hidden opacity-25 md:block" />
 
-      <div className="container relative z-10 flex min-h-[calc(100svh-80px)] items-end pb-12 md:pb-16">
+      <div className="container relative z-10 flex py-4 md:min-h-[calc(100svh-80px)] md:items-end md:pb-16 md:pt-0">
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
           <a
             href="/booking"
@@ -69,7 +73,7 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
       </div>
 
       {slides.length > 1 ? (
-        <div className="absolute bottom-36 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 md:bottom-5 md:left-auto md:right-5 md:translate-x-0">
+        <div className="relative z-20 flex items-center justify-center gap-2 pb-5 md:absolute md:bottom-5 md:right-5 md:justify-start md:pb-0">
           <button
             type="button"
             aria-label="Banner sebelumnya"
