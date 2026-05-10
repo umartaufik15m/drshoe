@@ -16,6 +16,9 @@ export function AboutSection() {
       <div className="container grid gap-10 lg:grid-cols-[0.9fr_1fr]">
         <SectionHeading eyebrow="Tentang" title="Tentang DR. SHOE" />
         <div>
+          <p className="mb-4 text-2xl font-black leading-tight text-black md:text-4xl">
+            Shoes Laundry & Treatment profesional di Bekasi.
+          </p>
           <p className="text-xl leading-9 text-neutral-700">
             DR. SHOE hadir sebagai solusi untuk pengguna sneakers dan sepatu harian yang ingin menjaga
             sepatu tetap bersih, wangi, dan lebih awet. Dengan cairan pembersih dan tools khusus, setiap

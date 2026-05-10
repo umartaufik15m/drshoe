@@ -3,7 +3,7 @@ import { SprayCan } from "lucide-react";
 import { Card, CardTitle } from "@/components/ui/card";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SPECIAL_SHOE_SURCHARGE } from "@/lib/pricing";
-import { formatRupiah } from "@/lib/utils";
+import { formatRupiah, formatThousands } from "@/lib/utils";
 import type { Service } from "@/lib/types";
 
 export function ServicesSection({ services }: { services: Service[] }) {
@@ -23,7 +23,7 @@ export function ServicesSection({ services }: { services: Service[] }) {
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-black text-[var(--brand)]">
                     <SprayCan size={19} />
                   </span>
-                  <p className="text-lg font-black">{formatRupiah(service.price)}</p>
+                  <p className="text-4xl font-black leading-none text-black">{formatThousands(service.price)}</p>
                 </div>
                 <CardTitle className="mt-4 text-lg">{service.name}</CardTitle>
                 <p className="mt-2 text-xs font-semibold leading-5 text-neutral-600">{service.description}</p>

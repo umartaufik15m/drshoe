@@ -13,6 +13,10 @@ export function formatRupiah(value: number) {
   }).format(value);
 }
 
+export function formatThousands(value: number) {
+  return `${Math.round(value / 1000)}K`;
+}
+
 export function prettyDate(value?: string | null) {
   if (!value) return "-";
   return new Intl.DateTimeFormat("id-ID", {
