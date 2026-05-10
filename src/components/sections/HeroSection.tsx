@@ -16,7 +16,7 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
     if (slides.length <= 1) return;
     const timer = window.setInterval(() => {
       setActive((current) => (current + 1) % slides.length);
-    }, 5200);
+    }, 6200);
     return () => window.clearInterval(timer);
   }, [slides.length]);
 
@@ -29,8 +29,8 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
           <div
             key={`${banner.id || banner.slug || banner.image_url}-${index}`}
             className={cn(
-              "absolute inset-0 transition duration-700 ease-out",
-              index === active ? "scale-100 opacity-100" : "scale-[1.03] opacity-0"
+              "absolute inset-0 transition-all duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform]",
+              index === active ? "scale-100 opacity-100" : "scale-[1.015] opacity-0"
             )}
           >
             <picture className="block h-full w-full">
