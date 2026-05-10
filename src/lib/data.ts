@@ -66,13 +66,15 @@ export const fallbackDropPoints: DropPoint[] = [
   {
     name: "Kopi Peneleh",
     slug: "kopi-peneleh",
+    address: "Jl. Pengasinan No.130B, Rawalumbu, Bekasi",
     maps_url: "https://maps.app.goo.gl/MqY5fdgP135bJnY16",
     description: "Titip sepatu lebih mudah melalui partner resmi DR. SHOE.",
     is_active: true
   },
   {
-    name: "Coffee Studio",
+    name: "Coffee Studio Matahari",
     slug: "coffee-studio",
+    address: "Jl. Raya Jatiasih, Jatiasih, Bekasi",
     maps_url: "https://maps.app.goo.gl/T5MWyFhLBETNnB3v5",
     description:
       "Drop sepatu di lokasi partner dan tim DR. SHOE akan memproses treatment sesuai layanan yang dipilih.",
@@ -106,14 +108,14 @@ export const fallbackTestimonials: Testimonial[] = [
 
 export const fallbackBeforeAfter: BeforeAfter[] = [
   {
-    title: "Sneakers Daily Wear",
+    title: "Outdoor Shoes Recovery",
     service_name: "Deep Clean",
     before_image_url: "/images/results/deep-clean-before.png",
     after_image_url: "/images/results/deep-clean-after.png",
     description: "Upper, midsole, dan outsole dibersihkan menyeluruh."
   },
   {
-    title: "Canvas Refresh",
+    title: "White Shoes Refresh",
     service_name: "Fast Clean",
     before_image_url: "/images/results/fastclean-before.png",
     after_image_url: "/images/results/fastclean-after.png",

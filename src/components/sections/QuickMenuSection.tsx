@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { CalendarCheck, MessageCircle } from "lucide-react";
-import { ShoeWashIcon } from "@/components/icons/ShoeWashIcon";
+import { CalendarCheck, CircleDollarSign, MessageCircle } from "lucide-react";
 import { navItems } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 import { defaultWhatsAppUrl } from "@/lib/whatsapp";
@@ -12,39 +11,26 @@ export function QuickMenuSection() {
         <div className="rounded-[1.5rem] border border-neutral-100 bg-white p-4 shadow-[0_18px_60px_rgba(0,0,0,0.12)] md:p-6">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {navItems.map((item) => {
-              const isHome = item.label === "Home";
-              const isService = item.label === "Layanan";
-              const isBooking = item.label === "Booking";
-              const Icon = isHome ? CalendarCheck : isService ? ShoeWashIcon : isBooking ? MessageCircle : item.icon;
+              const isHome = item.href === "/";
+              const isService = item.href === "/#layanan";
+              const isBooking = item.href === "/booking";
+              const Icon = isHome ? CalendarCheck : isService ? CircleDollarSign : isBooking ? MessageCircle : item.icon;
               const href = isHome ? "/booking" : item.href;
               const targetHref = isBooking ? defaultWhatsAppUrl : href;
-              const label = isHome ? "Booking Sekarang" : isBooking ? "Konsultasi" : item.label;
+              const label = isHome ? "Booking" : isService ? "Harga & Layanan" : isBooking ? "Konsultasi" : item.label;
               const content = (
                 <>
-                  <span className="relative mx-auto grid h-16 w-16 place-items-center">
-                    <span
-                      className={cn(
-                        "absolute h-11 w-11 rounded-full transition group-hover:scale-110",
-                        isHome ? "bg-black" : "bg-[var(--brand)]"
-                      )}
-                    />
-                    <Icon className={cn("relative z-10 h-9 w-9", isHome ? "text-[var(--brand)]" : "text-black")} />
+                  <span className="relative mx-auto grid h-14 w-14 place-items-center">
+                    <span className="absolute right-1 top-1 h-9 w-9 rounded-full bg-[var(--brand)] transition group-hover:scale-110" />
+                    <Icon className="relative z-10 h-8 w-8 text-black" />
                   </span>
-                  <span
-                    className={cn(
-                      "mt-3 block text-sm font-black uppercase leading-tight",
-                      isHome ? "text-black" : "text-black"
-                    )}
-                  >
+                  <span className="mt-3 block text-sm font-black uppercase leading-tight text-black">
                     {label}
                   </span>
                 </>
               );
               const className = cn(
-                "group min-h-32 rounded-[1.15rem] border p-4 text-center transition hover:-translate-y-1",
-                isHome
-                  ? "border-black bg-[var(--brand)] shadow-[5px_5px_0_#111] hover:shadow-[5px_5px_0_#ff2f92]"
-                  : "border-neutral-200 bg-white shadow-[0_10px_28px_rgba(0,0,0,0.08)] hover:border-black hover:shadow-[0_16px_32px_rgba(0,0,0,0.14)]"
+                "group min-h-28 rounded-[1.15rem] border-2 border-[var(--brand)] bg-white p-4 text-center shadow-[0_10px_24px_rgba(0,0,0,0.08)] transition hover:-translate-y-1 hover:border-black hover:shadow-[0_16px_32px_rgba(0,0,0,0.13)]"
               );
 
               return isBooking ? (

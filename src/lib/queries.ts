@@ -8,6 +8,37 @@ import {
 import { createServiceSupabaseClient } from "@/lib/supabase/server";
 import type { BeforeAfter, DropPoint, PromoBanner, Service, Testimonial } from "@/lib/types";
 
+const dropPointAddressBySlug: Record<string, string> = {
+  "kopi-peneleh": "Jl. Pengasinan No.130B, Rawalumbu, Bekasi",
+  "coffee-studio": "Jl. Raya Jatiasih, Jatiasih, Bekasi",
+  "coffee-studio-matahari": "Jl. Raya Jatiasih, Jatiasih, Bekasi"
+};
+
+function withDisplayDropPointAddress(point: DropPoint): DropPoint {
+  const name = point.name.toLowerCase();
+  const matchedAddress =
+    dropPointAddressBySlug[point.slug] ||
+    (name.includes("peneleh") ? dropPointAddressBySlug["kopi-peneleh"] : undefined) ||
+    (name.includes("studio") || name.includes("matahari") ? dropPointAddressBySlug["coffee-studio"] : undefined);
+
+  return {
+    ...point,
+    address: point.address || matchedAddress || null
+  };
+}
+
+function withDisplayBeforeAfterTitle(item: BeforeAfter): BeforeAfter {
+  const titleByLegacyTitle: Record<string, string> = {
+    "Canvas Refresh": "White Shoes Refresh",
+    "Sneakers Daily Wear": "Outdoor Shoes Recovery"
+  };
+
+  return {
+    ...item,
+    title: titleByLegacyTitle[item.title] || item.title
+  };
+}
+
 export async function getPromoBanners(): Promise<PromoBanner[]> {
   return fallbackPromoBanners;
 }
@@ -27,7 +58,7 @@ export async function getDropPoints(): Promise<DropPoint[]> {
   const supabase = createServiceSupabaseClient();
   if (!supabase) return fallbackDropPoints;
   const { data, error } = await supabase.from("drop_points").select("*").eq("is_active", true);
-  return error ? [] : data || [];
+  return error ? [] : (data || []).map((point) => withDisplayDropPointAddress(point));
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {
@@ -53,5 +84,5 @@ export async function getBeforeAfter(): Promise<BeforeAfter[]> {
 
   const items = data || [];
   const hasUploadedImages = items.some((item) => item.before_image_url && item.after_image_url);
-  return hasUploadedImages ? items : fallbackBeforeAfter;
+  return hasUploadedImages ? items.map((item) => withDisplayBeforeAfterTitle(item)) : fallbackBeforeAfter;
 }

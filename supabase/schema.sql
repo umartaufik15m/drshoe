@@ -130,12 +130,25 @@ on conflict (slug) do update set
   price = excluded.price,
   sort_order = excluded.sort_order;
 
-insert into public.drop_points (name, slug, maps_url, description)
+insert into public.drop_points (name, slug, address, maps_url, description)
 values
-  ('Kopi Peneleh', 'kopi-peneleh', 'https://maps.app.goo.gl/MqY5fdgP135bJnY16', 'Drop point resmi DR. SHOE.'),
-  ('Coffee Studio', 'coffee-studio', 'https://maps.app.goo.gl/T5MWyFhLBETNnB3v5', 'Drop point resmi DR. SHOE.')
+  (
+    'Kopi Peneleh',
+    'kopi-peneleh',
+    'Jl. Pengasinan No.130B, Rawalumbu, Bekasi',
+    'https://maps.app.goo.gl/MqY5fdgP135bJnY16',
+    'Drop point resmi DR. SHOE.'
+  ),
+  (
+    'Coffee Studio Matahari',
+    'coffee-studio',
+    'Jl. Raya Jatiasih, Jatiasih, Bekasi',
+    'https://maps.app.goo.gl/T5MWyFhLBETNnB3v5',
+    'Drop point resmi DR. SHOE.'
+  )
 on conflict (slug) do update set
   name = excluded.name,
+  address = excluded.address,
   maps_url = excluded.maps_url,
   description = excluded.description;
 
@@ -147,9 +160,9 @@ values
 
 insert into public.before_after (title, service_name, description)
 values
-  ('Sneakers Daily Wear', 'Deep Clean', 'Upper, midsole, dan outsole dibersihkan menyeluruh.'),
+  ('Outdoor Shoes Recovery', 'Deep Clean', 'Upper, midsole, dan outsole dibersihkan menyeluruh.'),
   ('White Sole Recovery', 'Unyellowing', 'Treatment untuk mengurangi tampilan sol yang menguning.'),
-  ('Canvas Refresh', 'Fast Clean', 'Cleaning cepat untuk noda ringan pada sepatu harian.');
+  ('White Shoes Refresh', 'Fast Clean', 'Cleaning cepat untuk noda ringan pada sepatu harian.');
 
 alter table public.orders enable row level security;
 alter table public.services enable row level security;

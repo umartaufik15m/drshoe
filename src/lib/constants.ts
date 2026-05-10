@@ -5,6 +5,7 @@ export const WHATSAPP_NUMBER = "6285781526923";
 export const INSTAGRAM_URL = "https://instagram.com/doctershoe";
 export const TIKTOK_URL = "https://www.tiktok.com/@doctershoe.bekasi";
 export const WORKSHOP_MAPS_URL = "https://maps.app.goo.gl/tBZp6ZzFqh4bjFCu6";
+export const WORKSHOP_ADDRESS = "Jl. Durian Kp. Ciketing No.62, Mustikajaya, Bekasi";
 
 export const deliveryMethodLabels = {
   direct: "Antar langsung",

@@ -20,7 +20,7 @@ export function Navbar() {
           <img
             src={logoUrl}
             alt="DR. SHOE"
-            className="h-12 w-12 rotate-[-3deg] rounded-2xl border-2 border-black bg-[var(--brand)] object-contain p-1 shadow-[4px_4px_0_#00e0ff]"
+            className="h-12 w-12 rotate-[-3deg] rounded-2xl border-2 border-black bg-[var(--brand)] object-contain p-1 shadow-[3px_3px_0_#111]"
           />
           <div>
             <p className="text-lg font-black uppercase tracking-normal">{BRAND_NAME}</p>
