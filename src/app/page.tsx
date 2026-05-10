@@ -8,6 +8,7 @@ import { FranchiseCTASection } from "@/components/sections/FranchiseCTASection";
 import { FranchiseSection } from "@/components/sections/FranchiseSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { OrderFlowSection } from "@/components/sections/OrderFlowSection";
+import { QuickMenuSection } from "@/components/sections/QuickMenuSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { getBeforeAfter, getDropPoints, getPromoBanners, getServices, getTestimonials } from "@/lib/queries";
@@ -24,6 +25,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection banners={promoBanners} />
+      <QuickMenuSection />
       <AboutSection />
       {services.length ? <ServicesSection services={services} /> : null}
       <AdvantagesSection />

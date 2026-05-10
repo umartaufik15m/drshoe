@@ -9,10 +9,10 @@ export function StickyWhatsAppButton() {
       href={defaultWhatsAppUrl}
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-4 left-4 right-4 z-50 inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[var(--brand)] text-sm font-black text-black shadow-lg md:hidden"
+      aria-label="Tanya DR. SHOE lewat WhatsApp"
+      className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full border-2 border-black bg-[var(--brand)] text-black shadow-[4px_4px_0_#ff2f92] transition hover:-translate-y-0.5 hover:brightness-95"
     >
-      <MessageCircle size={18} />
-      Tanya DR. SHOE
+      <MessageCircle size={24} />
     </a>
   );
 }

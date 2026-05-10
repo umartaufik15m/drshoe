@@ -5,18 +5,10 @@ import { Menu, MessageCircle, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/constants";
+import { navItems } from "@/lib/navigation";
 import { defaultWhatsAppUrl } from "@/lib/whatsapp";
 
 const logoUrl = "/images/main logo.jpeg";
-
-const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/#layanan", label: "Layanan" },
-  { href: "/drop-point", label: "Drop Point" },
-  { href: "/franchise", label: "Franchise" },
-  { href: "/booking", label: "Booking" },
-  { href: "/status", label: "Cek Status" }
-];
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
