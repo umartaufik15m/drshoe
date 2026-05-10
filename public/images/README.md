@@ -8,6 +8,7 @@ Promo banner:
 - Kelola dari `/admin/banners`
 - Resolusi ideal 1920 x 900 px atau 1920 x 1080 px
 - Maksimal 3 slide aktif
+- Banner hanya gambar; tombol Booking dan WhatsApp tampil otomatis dari website
 - Simpan objek utama di tengah gambar karena banner memenuhi layar dan akan crop otomatis
 
 Before-after section:

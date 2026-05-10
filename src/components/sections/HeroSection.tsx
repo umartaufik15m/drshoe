@@ -1,8 +1,7 @@
 "use client";
 
-import { ArrowRight, ChevronLeft, ChevronRight, MessageCircle, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { BRAND_TAGLINE, CAMPAIGN_PHRASE } from "@/lib/constants";
 import type { PromoBanner } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { defaultWhatsAppUrl } from "@/lib/whatsapp";
@@ -23,8 +22,7 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
     return () => window.clearInterval(timer);
   }, [slides.length]);
 
-  const activeBanner = slides[active] || slides[0];
-  if (!activeBanner) return null;
+  if (!slides.length) return null;
 
   function moveSlide(direction: 1 | -1) {
     setActive((current) => (current + direction + slides.length) % slides.length);
@@ -41,49 +39,29 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
               index === active ? "scale-100 opacity-100" : "scale-[1.03] opacity-0"
             )}
           >
-            <img
-              src={banner.image_url}
-              alt={banner.title}
-              className="h-full w-full object-cover"
-            />
+            <img src={banner.image_url} alt="Banner promo DR. SHOE" className="h-full w-full object-cover" />
           </div>
         ))}
       </div>
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.62)_38%,rgba(0,0,0,0.15)_72%,rgba(0,0,0,0.55)_100%)]" />
-      <div className="graffiti-noise absolute inset-0" />
-      <div className="absolute -left-16 top-16 h-40 w-40 rotate-12 border-[18px] border-[#f8e71c] opacity-80" />
-      <div className="absolute bottom-10 right-8 hidden rotate-[-8deg] bg-[#00e0ff] px-5 py-2 text-sm font-black uppercase text-black shadow-[8px_8px_0_#ff2f92] md:block">
-        DR. SHOE POP CARE
-      </div>
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
+      <div className="graffiti-noise absolute inset-0 opacity-25" />
 
-      <div className="container relative z-10 flex min-h-[calc(100svh-80px)] items-end pb-12 pt-16 md:pb-16">
-        <div className="max-w-4xl">
-          <span className="pop-sticker inline-flex items-center gap-2 bg-[#f8e71c] px-4 py-2 text-xs font-black uppercase text-black">
-            <Sparkles size={15} />
-            {activeBanner.badge_text || CAMPAIGN_PHRASE}
-          </span>
-          <h1 className="graffiti-title mt-6 max-w-4xl text-5xl font-black uppercase leading-[0.88] tracking-normal text-white md:text-8xl">
-            {activeBanner.title}
-          </h1>
-          <p className="mt-6 max-w-2xl bg-white px-4 py-2 text-base font-black leading-7 text-black md:text-xl">
-            {activeBanner.subtitle || BRAND_TAGLINE}
-          </p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <a
-              href={activeBanner.cta_href || "/booking"}
-              className="inline-flex h-12 items-center justify-center gap-2 border-2 border-black bg-[#f8e71c] px-6 text-sm font-black text-black shadow-[6px_6px_0_#ff2f92] transition hover:-translate-y-0.5"
-            >
-              {activeBanner.cta_label || "Booking Sekarang"} <ArrowRight size={18} />
-            </a>
-            <a
-              href={defaultWhatsAppUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex h-12 items-center justify-center gap-2 border-2 border-white bg-black/75 px-6 text-sm font-black text-white backdrop-blur transition hover:bg-white hover:text-black"
-            >
-              <MessageCircle size={18} /> Chat WhatsApp
-            </a>
-          </div>
+      <div className="container relative z-10 flex min-h-[calc(100svh-80px)] items-end pb-12 md:pb-16">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <a
+            href="/booking"
+            className="inline-flex h-12 items-center justify-center gap-2 border-2 border-black bg-[#f8e71c] px-6 text-sm font-black text-black shadow-[6px_6px_0_#ff2f92] transition hover:-translate-y-0.5"
+          >
+            Booking Sekarang <ArrowRight size={18} />
+          </a>
+          <a
+            href={defaultWhatsAppUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-12 items-center justify-center gap-2 border-2 border-white bg-black/75 px-6 text-sm font-black text-white backdrop-blur transition hover:bg-white hover:text-black"
+          >
+            <MessageCircle size={18} /> WhatsApp
+          </a>
         </div>
       </div>
 

@@ -74,7 +74,7 @@ Build Command: npm run vercel-build
 
 ## Promo Banner
 
-Homepage promo banners are managed at `/admin/banners`. Use up to 3 active slides.
+Homepage promo banners are managed at `/admin/banners`. Use up to 3 active image slides. The homepage keeps fixed `Booking Sekarang` and `WhatsApp` buttons on top of the banner image.
 
 Recommended image size:
 
