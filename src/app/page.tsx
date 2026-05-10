@@ -10,10 +10,13 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { OrderFlowSection } from "@/components/sections/OrderFlowSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
-import { getBeforeAfter, getDropPoints, getServices, getTestimonials } from "@/lib/queries";
+import { getBeforeAfter, getDropPoints, getPromoBanners, getServices, getTestimonials } from "@/lib/queries";
+
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [services, dropPoints, testimonials, beforeAfter] = await Promise.all([
+  const [promoBanners, services, dropPoints, testimonials, beforeAfter] = await Promise.all([
+    getPromoBanners(),
     getServices(),
     getDropPoints(),
     getTestimonials(),
@@ -22,7 +25,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection />
+      <HeroSection banners={promoBanners} />
       <AboutSection />
       {services.length ? <ServicesSection services={services} /> : null}
       <AdvantagesSection />

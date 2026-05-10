@@ -1,84 +1,126 @@
-import Link from "next/link";
-import { ArrowRight, BadgeCheck, MapPin, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { BRAND_TAGLINE, CAMPAIGN_PHRASE } from "@/lib/constants";
+"use client";
 
-export function HeroSection() {
-  const heroBefore = "/images/hero-before.jpg";
-  const heroAfter = "/images/hero-after.jpg";
+import { ArrowRight, ChevronLeft, ChevronRight, MessageCircle, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { BRAND_TAGLINE, CAMPAIGN_PHRASE } from "@/lib/constants";
+import type { PromoBanner } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { defaultWhatsAppUrl } from "@/lib/whatsapp";
+
+export function HeroSection({ banners }: { banners: PromoBanner[] }) {
+  const slides = useMemo(() => banners.filter((item) => item.image_url).slice(0, 3), [banners]);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    setActive(0);
+  }, [slides.length]);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const timer = window.setInterval(() => {
+      setActive((current) => (current + 1) % slides.length);
+    }, 5200);
+    return () => window.clearInterval(timer);
+  }, [slides.length]);
+
+  const activeBanner = slides[active] || slides[0];
+  if (!activeBanner) return null;
+
+  function moveSlide(direction: 1 | -1) {
+    setActive((current) => (current + direction + slides.length) % slides.length);
+  }
 
   return (
-    <section className="overflow-hidden bg-white py-16 md:py-24">
-      <div className="container grid items-center gap-12 lg:grid-cols-[1fr_0.9fr]">
-        <div>
-          <Badge className="mb-5 bg-yellow-200 text-black">
-            <Sparkles size={14} />
-            {CAMPAIGN_PHRASE}
-          </Badge>
-          <h1 className="text-balance text-5xl font-black leading-[0.98] tracking-normal text-black md:text-7xl">
-            Sepatu Kotor? Serahkan ke Dokternya.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-neutral-600">
-            DR. SHOE adalah layanan Shoes Laundry & Treatment profesional di Bekasi untuk membersihkan,
-            merawat, dan mengembalikan tampilan sepatu favoritmu.
-          </p>
-          <p className="mt-4 text-sm font-black uppercase text-neutral-900">{BRAND_TAGLINE}</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button asChild variant="brand" size="lg">
-              <Link href="/booking">
-                Booking Sekarang <ArrowRight size={18} />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/franchise">Lihat Franchise</Link>
-            </Button>
+    <section className="relative min-h-[calc(100svh-80px)] overflow-hidden bg-black text-white">
+      <div className="absolute inset-0">
+        {slides.map((banner, index) => (
+          <div
+            key={`${banner.id || banner.slug || banner.image_url}-${index}`}
+            className={cn(
+              "absolute inset-0 transition duration-700 ease-out",
+              index === active ? "scale-100 opacity-100" : "scale-[1.03] opacity-0"
+            )}
+          >
+            <img
+              src={banner.image_url}
+              alt={banner.title}
+              className="h-full w-full object-cover"
+            />
           </div>
-          <div className="mt-8 grid gap-3 text-sm font-bold text-neutral-700 sm:grid-cols-3">
-            <span className="inline-flex items-center gap-2">
-              <BadgeCheck size={18} /> Profesional
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <BadgeCheck size={18} /> Aman untuk bahan
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <MapPin size={18} /> Bekasi
-            </span>
-          </div>
-        </div>
+        ))}
+      </div>
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.62)_38%,rgba(0,0,0,0.15)_72%,rgba(0,0,0,0.55)_100%)]" />
+      <div className="graffiti-noise absolute inset-0" />
+      <div className="absolute -left-16 top-16 h-40 w-40 rotate-12 border-[18px] border-[#f8e71c] opacity-80" />
+      <div className="absolute bottom-10 right-8 hidden rotate-[-8deg] bg-[#00e0ff] px-5 py-2 text-sm font-black uppercase text-black shadow-[8px_8px_0_#ff2f92] md:block">
+        DR. SHOE POP CARE
+      </div>
 
-        <div className="relative rounded-[2rem] border border-neutral-200 bg-white p-3 shadow-[0_24px_80px_rgba(0,0,0,0.09)]">
-          <div className="absolute -right-3 -top-3 z-10 rounded-full border border-black bg-[var(--brand)] px-4 py-2 text-xs font-black uppercase text-black shadow-sm">
-            Real Treatment
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-          <div className="relative overflow-hidden rounded-[1.5rem] border border-neutral-200 bg-neutral-100">
-            <img
-              src={heroBefore}
-              alt="Sepatu sebelum treatment DR. SHOE"
-              className="aspect-square w-full object-cover"
-            />
-            <p className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-black uppercase text-neutral-700 shadow-sm">
-              Before
-            </p>
-          </div>
-          <div className="relative overflow-hidden rounded-[1.5rem] border-2 border-black bg-neutral-100">
-            <img
-              src={heroAfter}
-              alt="Sepatu setelah treatment DR. SHOE"
-              className="aspect-square w-full object-cover"
-            />
-            <p className="absolute left-3 top-3 rounded-full bg-[var(--brand)] px-3 py-1 text-xs font-black uppercase text-black shadow-sm">
-              After
-            </p>
-          </div>
-          </div>
-          <div className="mt-3 flex items-center justify-between gap-3 rounded-[1.25rem] bg-neutral-100 px-4 py-3">
-            <p className="text-xs font-black uppercase text-neutral-500">Before / After</p>
-            <p className="text-sm font-black text-black">DR. SHOE Bekasi</p>
+      <div className="container relative z-10 flex min-h-[calc(100svh-80px)] items-end pb-12 pt-16 md:pb-16">
+        <div className="max-w-4xl">
+          <span className="pop-sticker inline-flex items-center gap-2 bg-[#f8e71c] px-4 py-2 text-xs font-black uppercase text-black">
+            <Sparkles size={15} />
+            {activeBanner.badge_text || CAMPAIGN_PHRASE}
+          </span>
+          <h1 className="graffiti-title mt-6 max-w-4xl text-5xl font-black uppercase leading-[0.88] tracking-normal text-white md:text-8xl">
+            {activeBanner.title}
+          </h1>
+          <p className="mt-6 max-w-2xl bg-white px-4 py-2 text-base font-black leading-7 text-black md:text-xl">
+            {activeBanner.subtitle || BRAND_TAGLINE}
+          </p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={activeBanner.cta_href || "/booking"}
+              className="inline-flex h-12 items-center justify-center gap-2 border-2 border-black bg-[#f8e71c] px-6 text-sm font-black text-black shadow-[6px_6px_0_#ff2f92] transition hover:-translate-y-0.5"
+            >
+              {activeBanner.cta_label || "Booking Sekarang"} <ArrowRight size={18} />
+            </a>
+            <a
+              href={defaultWhatsAppUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-12 items-center justify-center gap-2 border-2 border-white bg-black/75 px-6 text-sm font-black text-white backdrop-blur transition hover:bg-white hover:text-black"
+            >
+              <MessageCircle size={18} /> Chat WhatsApp
+            </a>
           </div>
         </div>
       </div>
+
+      {slides.length > 1 ? (
+        <div className="absolute bottom-5 right-5 z-20 flex items-center gap-2">
+          <button
+            type="button"
+            aria-label="Banner sebelumnya"
+            className="grid h-11 w-11 place-items-center border-2 border-white bg-black/70 text-white backdrop-blur hover:bg-white hover:text-black"
+            onClick={() => moveSlide(-1)}
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <div className="flex h-11 items-center gap-2 border-2 border-white bg-black/70 px-3 backdrop-blur">
+            {slides.map((banner, index) => (
+              <button
+                key={`${banner.id || banner.image_url}-dot-${index}`}
+                type="button"
+                aria-label={`Buka banner ${index + 1}`}
+                className={cn(
+                  "h-2.5 w-8 transition",
+                  index === active ? "bg-[#f8e71c]" : "bg-white/45 hover:bg-white"
+                )}
+                onClick={() => setActive(index)}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            aria-label="Banner berikutnya"
+            className="grid h-11 w-11 place-items-center border-2 border-white bg-black/70 text-white backdrop-blur hover:bg-white hover:text-black"
+            onClick={() => moveSlide(1)}
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }

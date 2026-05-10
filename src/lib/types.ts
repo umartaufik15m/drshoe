@@ -55,6 +55,19 @@ export type BeforeAfter = {
   is_active?: boolean;
 };
 
+export type PromoBanner = {
+  id?: string;
+  slug?: string | null;
+  title: string;
+  subtitle?: string | null;
+  badge_text?: string | null;
+  image_url: string;
+  cta_label?: string | null;
+  cta_href?: string | null;
+  sort_order?: number | null;
+  is_active?: boolean;
+};
+
 export type Order = {
   id: string;
   customer_name: string;

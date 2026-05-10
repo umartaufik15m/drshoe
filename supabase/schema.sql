@@ -110,6 +110,21 @@ create table if not exists public.before_after (
   created_at timestamptz default now()
 );
 
+create table if not exists public.promo_banners (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  title text not null,
+  subtitle text,
+  badge_text text,
+  image_url text not null,
+  cta_label text,
+  cta_href text,
+  sort_order int default 0,
+  is_active boolean default true,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
 create table if not exists public.admin_profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
@@ -151,13 +166,49 @@ values
   ('White Sole Recovery', 'Unyellowing', 'Treatment untuk mengurangi tampilan sol yang menguning.'),
   ('Canvas Refresh', 'Fast Clean', 'Cleaning cepat untuk noda ringan pada sepatu harian.');
 
+insert into public.promo_banners (slug, title, subtitle, badge_text, image_url, cta_label, cta_href, sort_order)
+values
+  (
+    'fresh-kicks',
+    'Fresh Kicks, Fresh Move',
+    'Promo treatment sepatu harian untuk kamu yang aktif, street-ready, dan anti tampil kusam.',
+    'Promo Drop',
+    '/images/hero-after.jpg',
+    'Booking Sekarang',
+    '/booking',
+    1
+  ),
+  (
+    'before-kotor-after-pop',
+    'Before Kotor, After Pop',
+    'Deep Clean, Fast Clean, dan Repaint dengan sentuhan rapi dari tim DR. SHOE Bekasi.',
+    'Street Care',
+    '/images/hero-before.jpg',
+    'Lihat Layanan',
+    '/#layanan',
+    2
+  )
+on conflict (slug) do update set
+  title = excluded.title,
+  subtitle = excluded.subtitle,
+  badge_text = excluded.badge_text,
+  image_url = excluded.image_url,
+  cta_label = excluded.cta_label,
+  cta_href = excluded.cta_href,
+  sort_order = excluded.sort_order;
+
 alter table public.orders enable row level security;
 alter table public.services enable row level security;
 alter table public.drop_points enable row level security;
 alter table public.franchise_inquiries enable row level security;
 alter table public.testimonials enable row level security;
 alter table public.before_after enable row level security;
+alter table public.promo_banners enable row level security;
 alter table public.admin_profiles enable row level security;
+
+insert into storage.buckets (id, name, public)
+values ('promo-banners', 'promo-banners', true)
+on conflict (id) do update set public = true;
 
 drop policy if exists "Public can read active services" on public.services;
 create policy "Public can read active services"
@@ -177,6 +228,11 @@ using (is_active = true);
 drop policy if exists "Public can read active before after" on public.before_after;
 create policy "Public can read active before after"
 on public.before_after for select
+using (is_active = true);
+
+drop policy if exists "Public can read active promo banners" on public.promo_banners;
+create policy "Public can read active promo banners"
+on public.promo_banners for select
 using (is_active = true);
 
 drop policy if exists "Public can insert orders" on public.orders;
@@ -249,3 +305,34 @@ create policy "Admins can manage before after"
 on public.before_after for all
 using (exists (select 1 from public.admin_profiles where admin_profiles.id = auth.uid()))
 with check (exists (select 1 from public.admin_profiles where admin_profiles.id = auth.uid()));
+
+drop policy if exists "Admins can manage promo banners" on public.promo_banners;
+create policy "Admins can manage promo banners"
+on public.promo_banners for all
+using (exists (select 1 from public.admin_profiles where admin_profiles.id = auth.uid()))
+with check (exists (select 1 from public.admin_profiles where admin_profiles.id = auth.uid()));
+
+drop policy if exists "Public can read promo banner files" on storage.objects;
+create policy "Public can read promo banner files"
+on storage.objects for select
+using (bucket_id = 'promo-banners');
+
+drop policy if exists "Admins can upload promo banner files" on storage.objects;
+create policy "Admins can upload promo banner files"
+on storage.objects for insert
+with check (
+  bucket_id = 'promo-banners'
+  and exists (select 1 from public.admin_profiles where admin_profiles.id = auth.uid())
+);
+
+drop policy if exists "Admins can update promo banner files" on storage.objects;
+create policy "Admins can update promo banner files"
+on storage.objects for update
+using (
+  bucket_id = 'promo-banners'
+  and exists (select 1 from public.admin_profiles where admin_profiles.id = auth.uid())
+)
+with check (
+  bucket_id = 'promo-banners'
+  and exists (select 1 from public.admin_profiles where admin_profiles.id = auth.uid())
+);

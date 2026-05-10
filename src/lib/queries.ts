@@ -1,6 +1,26 @@
-import { fallbackBeforeAfter, fallbackDropPoints, fallbackServices, fallbackTestimonials } from "@/lib/data";
+import {
+  fallbackBeforeAfter,
+  fallbackDropPoints,
+  fallbackPromoBanners,
+  fallbackServices,
+  fallbackTestimonials
+} from "@/lib/data";
 import { createServiceSupabaseClient } from "@/lib/supabase/server";
-import type { BeforeAfter, DropPoint, Service, Testimonial } from "@/lib/types";
+import type { BeforeAfter, DropPoint, PromoBanner, Service, Testimonial } from "@/lib/types";
+
+export async function getPromoBanners(): Promise<PromoBanner[]> {
+  const supabase = createServiceSupabaseClient();
+  if (!supabase) return fallbackPromoBanners;
+  const { data, error } = await supabase
+    .from("promo_banners")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true })
+    .limit(3);
+
+  const items = (data || []).filter((item) => item.image_url) as PromoBanner[];
+  return error || !items.length ? fallbackPromoBanners : items;
+}
 
 export async function getServices(): Promise<Service[]> {
   const supabase = createServiceSupabaseClient();
@@ -39,5 +59,9 @@ export async function getBeforeAfter(): Promise<BeforeAfter[]> {
     .select("*")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
-  return error ? [] : data || [];
+  if (error) return fallbackBeforeAfter;
+
+  const items = data || [];
+  const hasUploadedImages = items.some((item) => item.before_image_url && item.after_image_url);
+  return hasUploadedImages ? items : fallbackBeforeAfter;
 }

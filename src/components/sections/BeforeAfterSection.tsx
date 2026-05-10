@@ -7,10 +7,12 @@ function TreatmentImage({ label, url }: { label: string; url?: string | null }) 
   if (url) {
     return (
       <div
-        className="h-44 rounded-2xl bg-cover bg-center"
+        className="grid h-44 place-items-end rounded-2xl bg-cover bg-center p-3"
         style={{ backgroundImage: `url(${url})` }}
         aria-label={label}
-      />
+      >
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black">{label}</span>
+      </div>
     );
   }
   return (
@@ -27,7 +29,7 @@ export function BeforeAfterSection({ items }: { items: BeforeAfter[] }) {
         <SectionHeading
           eyebrow="Result"
           title="Hasil Treatment DR. SHOE"
-          subtitle="Contoh transformasi treatment. Placeholder siap diganti dengan foto asli dari Supabase Storage."
+          subtitle="Transformasi before-after dari treatment sepatu DR. SHOE."
         />
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {items.map((item) => (

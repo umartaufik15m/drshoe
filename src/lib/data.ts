@@ -1,4 +1,27 @@
-import type { BeforeAfter, DropPoint, Service, Testimonial } from "@/lib/types";
+import type { BeforeAfter, DropPoint, PromoBanner, Service, Testimonial } from "@/lib/types";
+
+export const fallbackPromoBanners: PromoBanner[] = [
+  {
+    title: "Fresh Kicks, Fresh Move",
+    subtitle: "Promo treatment sepatu harian untuk kamu yang aktif, street-ready, dan anti tampil kusam.",
+    badge_text: "Promo Drop",
+    image_url: "/images/hero-after.jpg",
+    cta_label: "Booking Sekarang",
+    cta_href: "/booking",
+    sort_order: 1,
+    is_active: true
+  },
+  {
+    title: "Before Kotor, After Pop",
+    subtitle: "Deep Clean, Fast Clean, dan Repaint dengan sentuhan rapi dari tim DR. SHOE Bekasi.",
+    badge_text: "Street Care",
+    image_url: "/images/hero-before.jpg",
+    cta_label: "Lihat Layanan",
+    cta_href: "/#layanan",
+    sort_order: 2,
+    is_active: true
+  }
+];
 
 export const fallbackServices: Service[] = [
   {
@@ -84,22 +107,22 @@ export const fallbackBeforeAfter: BeforeAfter[] = [
   {
     title: "Sneakers Daily Wear",
     service_name: "Deep Clean",
-    before_image_url: "/images/results/deep-clean-before.jpg",
-    after_image_url: "/images/results/deep-clean-after.jpg",
+    before_image_url: "/images/results/deep-clean-before.png",
+    after_image_url: "/images/results/deep-clean-after.png",
     description: "Upper, midsole, dan outsole dibersihkan menyeluruh."
-  },
-  {
-    title: "White Sole Recovery",
-    service_name: "Unyellowing",
-    before_image_url: "/images/results/unyellowing-before.jpg",
-    after_image_url: "/images/results/unyellowing-after.jpg",
-    description: "Treatment untuk mengurangi tampilan sol yang menguning."
   },
   {
     title: "Canvas Refresh",
     service_name: "Fast Clean",
-    before_image_url: "/images/results/fast-clean-before.jpg",
-    after_image_url: "/images/results/fast-clean-after.jpg",
+    before_image_url: "/images/results/fastclean-before.png",
+    after_image_url: "/images/results/fastclean-after.png",
     description: "Cleaning cepat untuk noda ringan pada sepatu harian."
+  },
+  {
+    title: "Repaint Restoration",
+    service_name: "Repaint",
+    before_image_url: "/images/results/repaint-before.png",
+    after_image_url: "/images/results/repaint-after.png",
+    description: "Warna sepatu diperbarui agar tampil lebih bersih dan rapi."
   }
 ];

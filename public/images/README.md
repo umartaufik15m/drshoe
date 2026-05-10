@@ -4,6 +4,12 @@ Hero section:
 - hero-before.jpg
 - hero-after.jpg
 
+Promo banner:
+- Kelola dari `/admin/banners`
+- Resolusi ideal 1920 x 900 px atau 1920 x 1080 px
+- Maksimal 3 slide aktif
+- Simpan objek utama di tengah gambar karena banner memenuhi layar dan akan crop otomatis
+
 Before-after section:
 - results/deep-clean-before.jpg
 - results/deep-clean-after.jpg

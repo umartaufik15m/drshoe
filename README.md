@@ -20,7 +20,9 @@ cp .env.example .env.local
 
 4. Run `supabase/schema.sql` in the Supabase SQL editor.
 
-5. Create a public storage bucket named `shoe-photos` for shoe photo uploads.
+5. Run `supabase/schema.sql`, then make sure these public storage buckets exist:
+   - `shoe-photos`
+   - `promo-banners`
 
 6. Start development:
 
@@ -52,7 +54,7 @@ Build Command: npm run vercel-build
 
 5. After Vercel gives the production domain, update `NEXT_PUBLIC_SITE_URL` with that domain and redeploy.
 
-6. In Supabase, run `supabase/schema.sql`, create the `shoe-photos` storage bucket, and add the public URL domain to Auth URL settings if admin login redirects are used later.
+6. In Supabase, run `supabase/schema.sql`, make sure the storage buckets are created, and add the public URL domain to Auth URL settings if admin login redirects are used later.
 
 ## Routes
 
@@ -63,11 +65,22 @@ Build Command: npm run vercel-build
 - `/drop-point`
 - `/admin/login`
 - `/admin`
+- `/admin/banners`
 - `/admin/orders`
 - `/admin/franchise`
 - `/admin/services`
 - `/admin/drop-points`
 - `/admin/testimonials`
+
+## Promo Banner
+
+Homepage promo banners are managed at `/admin/banners`. Use up to 3 active slides.
+
+Recommended image size:
+
+- `1920 x 900 px` for a wide storefront banner
+- `1920 x 1080 px` if the photo needs more vertical room
+- Keep the main subject centered because the banner uses `object-cover` on desktop and mobile
 
 ## Admin Login
 
