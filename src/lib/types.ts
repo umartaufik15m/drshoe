@@ -62,6 +62,7 @@ export type PromoBanner = {
   subtitle?: string | null;
   badge_text?: string | null;
   image_url: string;
+  mobile_image_url?: string | null;
   cta_label?: string | null;
   cta_href?: string | null;
   sort_order?: number | null;

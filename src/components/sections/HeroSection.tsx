@@ -39,7 +39,10 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
               index === active ? "scale-100 opacity-100" : "scale-[1.03] opacity-0"
             )}
           >
-            <img src={banner.image_url} alt="Banner promo DR. SHOE" className="h-full w-full object-cover" />
+            <picture className="block h-full w-full">
+              <source media="(max-width: 767px)" srcSet={banner.mobile_image_url || banner.image_url} />
+              <img src={banner.image_url} alt="Banner promo DR. SHOE" className="h-full w-full object-cover" />
+            </picture>
           </div>
         ))}
       </div>
@@ -47,7 +50,7 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
       <div className="graffiti-noise absolute inset-0 opacity-25" />
 
       <div className="container relative z-10 flex min-h-[calc(100svh-80px)] items-end pb-12 md:pb-16">
-        <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
           <a
             href="/booking"
             className="inline-flex h-12 items-center justify-center gap-2 border-2 border-black bg-[#f8e71c] px-6 text-sm font-black text-black shadow-[6px_6px_0_#ff2f92] transition hover:-translate-y-0.5"
@@ -66,7 +69,7 @@ export function HeroSection({ banners }: { banners: PromoBanner[] }) {
       </div>
 
       {slides.length > 1 ? (
-        <div className="absolute bottom-5 right-5 z-20 flex items-center gap-2">
+        <div className="absolute bottom-36 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 md:bottom-5 md:left-auto md:right-5 md:translate-x-0">
           <button
             type="button"
             aria-label="Banner sebelumnya"

@@ -4,18 +4,21 @@ export const fallbackPromoBanners: PromoBanner[] = [
   {
     title: "Banner Promo 1",
     image_url: "/images/banner/banner-promo-1.png",
+    mobile_image_url: "/images/banner/mobile/banner-promo-1.png",
     sort_order: 1,
     is_active: true
   },
   {
     title: "Banner Promo 2",
     image_url: "/images/banner/banner-promo-2.png",
+    mobile_image_url: "/images/banner/mobile/banner-promo-2.png",
     sort_order: 2,
     is_active: true
   },
   {
     title: "Banner Promo 3",
     image_url: "/images/banner/banner-promo-3.png",
+    mobile_image_url: "/images/banner/mobile/banner-promo-3.png",
     sort_order: 3,
     is_active: true
   }

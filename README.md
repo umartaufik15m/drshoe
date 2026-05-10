@@ -73,17 +73,23 @@ Build Command: npm run vercel-build
 
 Homepage promo banners are loaded from `public/images/banner`. Use up to 3 image slides. The homepage keeps fixed `Booking Sekarang` and `WhatsApp` buttons on top of the banner image.
 
-Use these exact file names:
+Use these exact file names for desktop:
 
 - `public/images/banner/banner-promo-1.png`
 - `public/images/banner/banner-promo-2.png`
 - `public/images/banner/banner-promo-3.png`
 
+Use these exact file names for mobile:
+
+- `public/images/banner/mobile/banner-promo-1.png`
+- `public/images/banner/mobile/banner-promo-2.png`
+- `public/images/banner/mobile/banner-promo-3.png`
+
 Recommended image size:
 
-- `1920 x 900 px` for a wide storefront banner
-- `1920 x 1080 px` if the photo needs more vertical room
-- Keep the main subject centered because the banner uses `object-cover` on desktop and mobile
+- Desktop: `1920 x 1080 px`
+- Mobile: `1080 x 1920 px`
+- Keep the main subject centered because the banner uses `object-cover`
 
 ## Admin Login
 
